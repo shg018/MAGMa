@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Magma for IP-DIA LFQ</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="/static/mysite/css/setparametersforrun.css">
+  <!-- Google tag (gtag.js) -->
+  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-75GB1DLLMT"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-75GB1DLLMT');
+        </script> -->
+  <style>
+    div {
+      border: 0px solid red;
+    }
+
+    #left {
+      float: left;
+      width: 50%;
+    }
+
+    #right {
+      float: right;
+      width: 49%;
+    }
+
+    #center {
+      width: 60%;
+      margin: 0px auto;
+    }
+
+    #center_1 {
+      width: 30%;
+      margin: 0px auto;
+    }
+
+    span.circle {
+      background: #e3e3e3;
+      border-radius: 50%;
+      -moz-border-radius: 50%;
+      -webkit-border-radius: 50%;
+      color: #6e6e6e;
+      display: inline-block;
+      font-weight: bold;
+      line-height: 70px;
+      margin-right: 5px;
+      text-align: center;
+      width: 70px;
+    }
+
+    h3,
+    span.circle {
+      display: inline-block;
+    }
+
+    #errorexpanded {
+      display: none;
+    }
+  </style>
+</head>
+
+<body style="background-color:white;">
+  <!-- #d6cbd3 -->
+  <nav class="navbar navbar-expand-sm navbar-light fixed-top bg-light">
+    <a class="navbar-brand d-none d-sm-block" href="{% url 'index' %}">Magma: Quantification and analysis of MS data</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+      aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="{% url 'index' %}">Home<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item ml-sm-3">
+          <a class="nav-link" href="{% url 'downloads' %}">Downloads</a>
+        </li>
+        <li class="nav-item ml-sm-3">
+          <a class="nav-link" href="{% url 'about' %}">About</a>
+        </li>
+        <li class="nav-item ml-sm-3">
+          <a class="nav-link" href="{% url 'usage' %}">Help</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <br>
+  <br>
+  <br>
+  <br>
+  <div id="center">
+
+    {% if not run_success %}
+    {% if not submit_success %}
+
+    <form action="{% url 'IPDIA' %}?analysisType={{ analysis_type }}" method="post" enctype="multipart/form-data">
+
+      {% csrf_token %}
+      {{ message_3 }}
+      <span class="circle">1</span>
+      <h3 style="color:#588c7e"> Upload the 'Annotation file'</h3>
+      <p> For more information: <span class="custom-tooltip-container">
+          <span class="circle-question"> ? </span>
+          <span class="custom-tooltip-tooltiptext">
+            This file is to assign labels to channels according to experimental setup.
+            Columns needed in this file are - Channel, Label and Control.
+            Channel are the column header(s) in the DIANN output specifying quantification per row.
+            Also need to specify which channels should be considered as "Controls".
+            Important to choose the conditions to be compared.
+            <br><br>NOTE: File name should not have spaces and should be ".csv" format.
+            <br><br>NOTE(2): The "Label" column should NOT have "-" character.
+          </span>
+        </span>
+      </p>
+
+      <p>{{ form_3.non_field_errors }}</p>
+
+      <p>{{ form_3.docfile_3.label_tag }} {{ form_3.docfile_3.help_text }}</p>
+
+      <p>
+        {{ form_3.docfile_3.errors }}
+        {{ form_3.docfile_3 }}
+      </p>
+
+      <p><input type="submit" value="Submit">
+        <input type="reset" value="Reset">
+      </p>
+      {% load static %}
+      <a href="{% static 'MLH1_FLAG_annotation.csv' %}" download>Sample file</a>
+
+
+
+    </form>
+    {% endif %}
+    {% endif %}
+
+
+    {% if condition_comb_vs_cntrl%}
+    <form action="{% url 'IPDIA' %}?analysisType={{ analysis_type }}" method="post" enctype="multipart/form-data">
+      <span class="circle">2</span>
+      <h3 style="color:#0e5035">Select the Comparison You Would Like to Perform</h3>
+      <h6 style="color:#588c7e"> Choose a comparison with control </h6>
+      {%for comb in condition_comb_vs_cntrl%}
+      <label><input type="radio" name="combinations" value="{{ comb }}_IsC">{{ comb }}</label><br>
+      {% endfor %}
+      <br>
+
+      {% if condition_comb_no_cntrl%}
+      <h6 style="color:#588c7e"> OR Choose a comparison NOT with control </h6>
+      {%for comb in condition_comb_no_cntrl%}
+      <label><input type="radio" name="combinations" value="{{ comb }}_NotC">{{ comb }}</label><br>
+      {% endfor %}
+      <br>
+      <br>
+      <h6 style="color:#588c7e"> Choose the direction for comparison:</h6>
+
+      <label><input type="radio" name="Analysis Direction" value="+1">(Condition_1/Condition_2)</label><br>
+      <label><input type="radio" name="Analysis Direction" value="-1">(Condition_2/Condition_1)</label><br>
+
+      <p><input type="reset" value="Reset"></p>
+
+
+      <!-- {% endif %} 
+      </form>-->
+  </div>
+
+  <div id="center">
+    <!-- <form action="{% url 'TMT' %}" method="post" enctype="multipart/form-data"> -->
+    <!-- Upload form. Note enctype attribute! -->
+
+
+    {% csrf_token %}
+    {{ message_1}}
+
+    <span class="circle">3</span>
+    <h3 style="color:#563f46">Upload a tab separated Bruker+DIANN text file with protein level information.</h3>
+    <p> For more information: <span class="custom-tooltip-container">
+        <span class="circle-question"> ? </span>
+        <span class="custom-tooltip-tooltiptext">
+          This file is the output from DIA-NN search in the form of tab delimited ".tsv" file of all information
+          aggregated to protein level.
+          <br><br>NOTE: After running DIA-NN the output file should probably have "pg_matrix.tsv" in the name.
+          <br><br>NOTE (2): IMPORTANT!! Set column name as "Protein" for the column to be used as unique protein ID's.
+        </span>
+      </span>
+    </p>
+    <p>{{ form_1.non_field_errors }}</p>
+
+    <p>{{ form_1.docfile_1.label_tag }} {{ form_1.docfile_1.help_text }}</p>
+
+    <p>
+      {{ form_1.docfile_1.errors }}
+      {{ form_1.docfile_1 }}
+    </p>
+
+    <p>
+      <input type="reset" value="Reset">
+    </p>
+    <a href="{% static 'MLH1_FLAG_20230720.pg_matrix.tsv' %}" download>Sample file</a>
+
+
+
+    <br>
+
+    {% csrf_token %}
+    {{ message_2}}
+
+    <span class="circle">4</span>
+    <h3 style="color:#563f46">Upload a tab separated Bruker+DIANN text file with ALL information.</h3>
+    <p> For more information: <span class="custom-tooltip-container">
+        <span class="circle-question"> ? </span>
+        <span class="custom-tooltip-tooltiptext">
+          This file is the output from DIA-NN search in the form of tab delimited ".tsv" file of all information NOT
+          aggregated.
+          Used for finding # Precursors etc per protein. Potential way to filter out noise.
+          <br><br>NOTE: After running DIA-NN the output file that is the name of the run in ".tsv" format.
+          <br><br>NOTE (2): IMPORTANT!! Set column name as "Protein" for the column to be used as unique protein ID's.
+        </span>
+      </span>
+    </p>
+    <p>{{ form_2.non_field_errors }}</p>
+
+    <p>{{ form_2.docfile_1.label_tag }} {{ form_2.docfile_2.help_text }}</p>
+
+    <p>
+      {{ form_2.docfile_2.errors }}
+      {{ form_2.docfile_2 }}
+    </p>
+
+    <p>
+      <input type="reset" value="Reset">
+    </p>
+    <a href="{% static 'MLH1_FLAG_20230720_example.tsv' %}" download>Sample file</a>
+
+
+
+    <br>
+
+    <span class="circle">5</span>
+    <h3 style="color:#0b3f61">Choose type of column-type normalization: </h3>
+    <p> For more information: <span class="custom-tooltip-container">
+        <span class="circle-question"> ? </span>
+        <span class="custom-tooltip-tooltiptext">
+          Choose global normalization if you can assume that most proteins in your experiment are NOT going to be
+          differentially up or down regulated for the conditions being compared.
+          <br>Choose protein list normalization and provide a list of uniprots in case you know of specific proteins
+          that can be assumed to be unchanging between the conditions compared as a result of experimental setup.
+          <br>Choose no column normalization in case none of the situations discussed are applicable.
+        </span>
+      </span>
+    </p>
+    <p>
+      <label><input type="radio" checked="checked" name="columnnorm" value="globalnorm">Global Normalization<span
+          class="checkmark"></span></label><br>
+      <label><input type="radio" name="columnnorm" value="protnorm">Protein-list Normalization<span
+          class="checkmark"></span></label><br>
+      <label><input type="radio" name="columnnorm" value="nocolumnnorm">No Column Normalization<span
+          class="checkmark"></span></label><br>
+    </p>
+
+    <div id="errorexpanded">
+      {% csrf_token %}
+      <h5>Input the uniprot ID's comma separated.<br> Example: P16140,P39107,P04806.<br> Enter - "human" or "yeast" or
+        "ecoli" for whole proteome</h5>
+      <p>{{ form_prot_norm.non_field_errors }}</p>
+
+      <p>{{ form_prot_norm.uniprot_to_normby.help_text }}</p>
+
+      <p>
+        {{ form_prot_norm.uniprot_to_normby.errors }}
+        {{ form_prot_norm.uniprot_to_normby }}
+
+
+      <p>
+        <input type="reset" value="Reset">
+      </p>
+    </div>
+
+    <script>
+      document.querySelectorAll('input[type="radio"][name="columnnorm"]').forEach(e => {
+        e.addEventListener('change', function () {
+          if (this.value == "protnorm") {
+            errorexpanded.style.display = "block";
+          } else {
+            errorexpanded.style.display = "none";
+          }
+        })
+      })
+    </script>
+
+
+
+
+
+    {% csrf_token %}
+    <span class="circle">6</span>
+    <h3 style="color:#0b3f61">Enter the Uniprot ID of your bait below: </h3>
+    <p> For more information: <span class="custom-tooltip-container">
+        <span class="circle-question"> ? </span>
+        <span class="custom-tooltip-tooltiptext">
+          This field is important for two reasons:
+          <br> 1. For the volcano plot display (highlighting the bait in the IP-MS experiment).
+          <br> 2. For determining the PSM cutoff based on the # PSMs associated with the bait.
+          <br> Possible source of error if the uniprot ID specified is not in the input files (PSM lists with reporter
+          ion intensities at step 3 and 4)
+          <br> Possible source of error if the uniprot ID specified is not in the input files (PSM lists with reporter
+          ion intensities at step 3 and 4)
+          <br> NOTE: Type in "NA" if you don't want to run bait-normalization in any type of comparison. Only happens in
+          not vs Control comparisons by default.
+        </span>
+      </span>
+    </p>
+    <p>{{ form_4.non_field_errors }}</p>
+
+    <p>{{ form_4.bait_name.help_text }}</p>
+
+    <p>
+      {{ form_4.bait_name.errors }}
+      {{ form_4.bait_name }}
+      <input type="text" name="annotation_file" value={{annotation_file_name}}>
+
+
+    <p>
+      <input type="reset" value="Reset">
+    </p>
+
+    <!-- Add an imputation -->
+    <span class="circle">7</span>
+    <h3 style="color:#0b3f61">Choose whether to do imputation </h3>
+    <p> For more information: <span class="custom-tooltip-container">
+        <span class="circle-question"> ? </span>
+        <span class="custom-tooltip-tooltiptext">
+          Imputation is only aimed at recovering the proteins that are not quantified in Control condition.
+          The control condition could be completely empty when the protein under consideration is not expected to
+          express endogenously for example.
+          Such entries should not be penalized, and the empty controls is substituted with lowest value per control
+          replicate.
+          Only keep as many imputed control values as treatment values.
+          <br><br>NOTE: Imputation introduces its own biases in the dataset.
+        </span>
+      </span>
+    </p>
+    <p>
+      <label><input type="radio" name="imputationchoice" value="noimpute">No Imputation<span
+          class="checkmark"></span></label><br>
+      <label><input type="radio" checked="checked" name="imputationchoice" value="impute">Imputation<span
+          class="checkmark"></span></label><br>
+    </p>
+
+
+    <b>{{bait_message}}</b>
+
+    <b><input id="start-btn" type="submit" value="Run the Analysis" onclick="showLoading()"
+        style="height:50px; width:300px; font-size: 30px; color: purple; border: 2px solid rgb(37, 34, 34)"></b>
+
+    <div id="submitSuccess" style="display:none;">
+      <p>Your job has been succesfully submitted, you will be redirected to the result page once the analysis is
+        complete</p>
+      <button class="btn btn-primary"
+        style="height:80px; width:300px; font-size: 30px; background-color: purple; color:white; border: 2px solid rgb(37, 34, 34)"
+        type="button" disabled>
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        Loading...
+      </button>
+    </div>
+
+    <b>{{submit_message}}</b>
+    <b>{{bait_message}}</b>
+    <br><b>{{file_annotation_1}}
+      <br><br>
+      <p style="color:red;"> {{validation_1}} </p>
+      </form>
+      <script>
+        function showLoading() {
+          document.getElementById('submitSuccess').style.display = "block";
+        }
+      </script>
+
+
+
+      {% endif %}
+
+
+
+      <br><br><br>
+
+      {% if run_success %}
+
+
+      {% load static %}
+      <h2 style="color:#057518"> Success! </h2>
+      <a href="{% static result_file_name %} " download>Click Here to Download the Result File</a>
+      <br>
+      <a href="{% static volcano_baseline %} " download>Click Here to Download the baseline Volcano plot (PDF)</a>
+      <!-- <h3 > (The Result file and baseline volcano plot has also been created in the "Result" folder) </h3> -->
+
+      <!--Display the sliders here-->
+      <style>
+        .slidecontainer {
+          width: 100%;
+        }
+
+        .slider {
+          width: 100%;
+          height: 25px;
+          background: #d3d3d3;
+          outline: none;
+          opacity: 0.7;
+          -webkit-transition: .2s;
+          transition: opacity .2s;
+        }
+
+        .slider:hover {
+          opacity: 1;
+        }
+
+        .slider::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          appearance: none;
+          width: 25px;
+          height: 25px;
+          background: #04AA6D;
+          cursor: pointer;
+        }
+
+        .slider::-moz-range-thumb {
+          width: 25px;
+          height: 25px;
+          background: #04AA6D;
+          cursor: pointer;
+        }
+      </style>
+
+
+      <!--Area for displaying the volcano plot optimization-->
+      <!-- Load d3.js -->
+      <script src="https://d3js.org/d3.v4.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/canvg/1.5/canvg.min.js"></script>
+
+
+      <div class="slidecontainer">
+        <p>FC cutoff choice: Drag the slider to display the current value.</p>
+        <input type="range" min="1" max="10" step="0.1" value="2" name="fcSlider" class="slider" id="fcRange">
+        <p>Value: <span id="fcValue"></span></p>
+
+        <p>Adjusted P-value cutoff choice: Drag the slider to display the current value.</p>
+        <input type="range" min="0.005" max="0.5" step="0.00005" value="0.05" name="pvalSlider" class="slider"
+          id="pvalRange">
+        <p>Value: <span id="pvalValue"></span></p>
+
+        <p>PSM cutoff choice: Drag the slider to display the current value.</p>
+        <input type="range" min="0" max="100" step="5" value="5" name="psmSlider" class="slider" id="psmRange">
+        <p>Value: <span id="psmValue"></span></p>
+
+        <p>Size of scatter point: Drag the slider to display the current value.</p>
+        <input type="range" min="1" max="15" step="1" value="5" name="dotsizeSlider" class="slider" id="dotsizeRange">
+        <p>Value: <span id="dotsizeValue"></span></p>
+      </div>
+      <div class="displayinfo">
+        <!-- Get user input for proteins to highlight in the plot -->
+        <!-- Input box for CSV string -->
+        <textarea id="protein-list-input" rows="4" cols="50" placeholder="Enter Uniprot IDs separated by @
+        Example: Q08945@Q9UQE7"></textarea>
+
+        <!-- Button to trigger plot update -->
+        <button id="update-button">Update Volcano Plot</button>
+      </div>
+
+
+      <!-- Create a div where the graph will take place -->
+      <div id="my_dataviz"></div>
+      <a id="download-button" download="volcano_plot.png">
+        <button>Download Volcano Plot</button>
+      </a>
+
+      <button id="download-subset-file-button">Download Subset CSV</button>
+      <br><br><br><br>
+
+      <script id="volcanoplot-file" type="application/text">{% static result_file_name %}</script>
+      <script src="{% static 'mysite/javascripts/volcanoplotgenerate.js' %}"></script>
+      <script src="{% static 'mysite/javascripts/subsetcsvfile.js' %}"></script>
+      {%endif%}
+
+  </div>
+
+
+
+
+
+  <footer class="navbar navbar-expand-sm navbar-light fixed-bottom bg-light">
+    <div class="responsive text-center small footer-text">
+      <span class="text-muted">
+        Designed by <a href="mailto:sg2369@cornell.edu">Shagun Gupta</a> | © 2023-2023 <a
+          href="https://www.yulab.org">Haiyuan Yu</a>
+      </span>
+    </div>
+  </footer>
+
+
+</body>
+
+</html>

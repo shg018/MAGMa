@@ -1,0 +1,223 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Magma Home page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <!-- Google tag (gtag.js) -->
+  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-75GB1DLLMT"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-75GB1DLLMT');
+  </script>  -->
+  <style>
+
+    @media (max-width: 1388px) {
+      body {min-width: 1388px;}
+  }
+   
+  </style>
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="/static/mysite/css/style.css">
+  <script>
+    var analysisVal = "PDLM";
+  </script>
+
+</head>
+
+<body style="background-color:white;">
+
+  
+
+  <nav class="navbar navbar-expand-sm navbar-light fixed-top bg-light">
+    <a class="navbar-brand d-none d-sm-block" href="{% url 'index' %}">Magma: Quantification and analysis of MS data</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'index' %}">Home<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item ml-sm-3">
+                <a class="nav-link" href="{% url 'downloads' %}">Downloads</a>
+            </li>
+            <li class="nav-item ml-sm-3">
+                <a class="nav-link" href="{% url 'about' %}">About</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+ 
+  <!-- <img src="{% static 'mysite/images/LAVA-PipelineLogo.svg' %}" class="responsive" style="width:25%"></img> -->
+  
+  {% comment %} <script src="{% static 'mysite/javascripts/tooltips.js' %}"></script> {% endcomment %}
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+  <div class="analysistypeLeft">
+  <br><br>
+  <!-- TODO Need to have user choose the type of analysis to be done (PD vs COMET, Magma-PD/LM/Limma) -->
+  <!-- The form value should help decide which webpage to go to -->
+  <p><h5>Analysis Type</h5></p>
+  <p><h6>Use SEQUEST Search results: </h6></p>
+  <label><input type="radio" name="TMTanalysistype" value="PDLimma"> Magma (Limma) </label><br>
+  </div>
+  <div class="analysistypeRight">
+  <br><br><br><br>
+  <p><h6>Use COMET Search results: </h6></p>
+  <label><input type="radio" name="TMTanalysistype" value="CometLimma"> Magma (Limma) </label><br>
+  </div>
+
+  <!-- <div id="tooltip" display="none" style="position: absolute; display: none;"></div> -->
+  <div class="responsiveDataType">
+    <script>
+      analysisVal = "PDLimma";
+      $('input[type="radio"]').on('click', function() {
+          analysisVal = this.value;
+          // alert(analysisVal);
+      });
+      
+  
+    </script>
+    <svg width="200%" height="200%" viewBox="100 0 1400 750" class="arcs">
+      <!-- <svg width="100%" height="100%" viewBox="0 0 1800 7050" class="arcs"></svg> -->
+      <!-- <svg width="1558" height="950" viewBox="640 -400 150 1000" class="arcs"> -->
+        <!-- <svg width="1558" height="950" viewBox="640 -200 150 900" class="arcs"> -->
+        <a href="{% url 'TMT' %}" onclick="javascript:location.href='TMT'+'?analysisType='+analysisVal;return false;">
+          <text x="315" y="200" 
+          text-anchor="middle"
+          stroke="#878787"
+          stroke-width="1px"
+          font-size="20"
+          alignment-baseline="middle"
+          > IP-SILAC (Mutation or drug treatment) 
+          </text>
+          <line x1="315" y1="210" x2="315" y2="385" style="stroke:#878787;stroke-width:5" />
+          <defs>
+            <pattern id="imageIPTMT" x="0" y="0" patternUnits="userSpaceOnUse" height="500" width="500">
+              <image x="0" y="0" xlink:href="{% static 'mysite/images/stable_diffusion3.png' %}"></image>
+            </pattern>
+          </defs>
+          <circle cx="315" cy="385" r="100" fill="url(#imageIPTMT)"/>
+          <path id="button1" fill-opacity="0" stroke="#878787" stroke-width="5" id="4-arc" d="M -500, 100 a 100,100 0 1,1 200,0 a 100,100 0 1,1 -200,0" transform="translate(716, 285)" style="opacity: 1;">
+            <title>IP-SILAC</title>
+          </path>
+        </a>
+
+
+        <a href="{% url 'TMT' %}" onclick="javascript:location.href='TMT'+'?analysisType='+analysisVal;return false;">
+          <text x="1115" y="200" 
+          text-anchor="middle"
+          stroke="#878787"
+          stroke-width="1px"
+          font-size="20"
+          alignment-baseline="middle"
+          > Whole Proteome SILAC (benchmarks)
+          </text>
+          <line x1="1115" y1="210" x2="1115" y2="385" style="stroke:#878787;stroke-width:5" />
+          <defs>
+            <pattern id="imagewholeTMT" x="0" y="0" patternUnits="userSpaceOnUse" height="600" width="600">
+              <image x="0" y="0" xlink:href="{% static 'mysite/images/stable_diffusion5.png' %}"></image>
+            </pattern>
+          </defs>
+          <circle cx="1115" cy="385" r="100" fill="url(#imagewholeTMT)"/>
+          <path id="button3" fill-opacity="0" stroke="#878787" stroke-width="5" id="4-arc" d="M 300, 100 a 100,100 0 1,1 200,0 a 100,100 0 1,1 -200,0" transform="translate(716, 285)" style="opacity: 1;">
+            <title>WholeProt-SILAC</title>
+          </path>
+        </a>
+
+        <!-- <a href="{% url 'TMT' %}">
+          <text x="1115" y="200" 
+          text-anchor="middle"
+          stroke="#878787"
+          stroke-width="1px"
+          font-size="20"
+          alignment-baseline="middle"
+          > Whole Proteome TMT (benchmarks)
+          </text>
+          <defs>
+            <pattern id="imagewholeTMT" x="0" y="0" patternUnits="userSpaceOnUse" height="600" width="600">
+              <image x="0" y="0" xlink:href="{% static 'mysite/images/stable_diffusion5.png' %}"></image>
+            </pattern>
+          </defs>
+          <circle cx="1115" cy="385" r="100" fill="url(#imagewholeTMT)"/>
+          <path onmousemove="showTooltipRight(evt, 'This is TMT (whole proteome - benchmark)');" onmouseout="hideTooltip();" id="button3" fill-opacity="0" stroke="#878787" stroke-width="5" id="4-arc" d="M 300, 100 a 100,100 0 1,1 200,0 a 100,100 0 1,1 -200,0" transform="translate(716, 285)" style="opacity: 1;">
+            <title>WholeProt-TMT</title>
+          </path>
+        </a> -->
+        
+        <!-- <g font-size="0.8rem" text-anchor="middle" transform="translate(679,303.5)">
+          <text transform="translate(160.28 -139.28)">
+            <tspan pointer-events="none" y="0">BUTTON1</tspan>
+          </text>
+          <text transform="translate(-80.28 -139.28)">
+            <tspan pointer-events="none" y="0">TMT Samples</tspan>
+          </text>
+        </g> -->
+    </svg>
+  </div>
+  <footer class="navbar navbar-expand-sm navbar-light fixed-bottom bg-light">
+    <div class="responsive text-center small footer-text">
+        <span class="text-muted">
+            Designed by <a href="mailto:sg2369@cornell.edu">Shagun Gupta</a> | © 2023-2023 <a href="https://www.yulab.org">Yu Lab</a>
+        </span>
+    </div>
+</footer>
+
+
+
+
+<script>
+  // // The tooltip window scales according to window size and is not accurate compared to svg
+  // document.getElementById("MyPath").setAttribute("d", document.getElementById("Path").getAttribute("d"));
+  // var tl = new TimelineMax({
+  //   repeat: 0,
+  //   delay: 1
+  // });
+  // tl.to("#Text", 3, {
+  //   attr: {
+  //     startOffset: '50%',
+  //     opacity: 1
+  //   }
+  // });
+
+
+  // window.addEventListener('scroll', function() {
+  //   tl.to("#Text", 3, {
+  //     attr: {
+  //       startOffset: '100%',
+  //       opacity: 0
+  //     }
+  //   });
+  // }, true);
+
+  function showTooltipRight(evt, text) {
+    let tooltip = document.getElementById("tooltip");
+    tooltip.innerHTML = text;
+    tooltip.style.display = "block";
+    tooltip.style.left = evt.pageX - 150 + 'px';
+    tooltip.style.top = evt.pageY + 10 + 'px';
+  }
+
+  function showTooltipLeft(evt, text) {
+    let tooltip = document.getElementById("tooltip");
+    tooltip.innerHTML = text;
+    tooltip.style.display = "block";
+    tooltip.style.left = evt.pageX + 150 + 'px';
+    tooltip.style.top = evt.pageY + 10 + 'px';
+  }
+  
+  function hideTooltip() {
+    var tooltip = document.getElementById("tooltip");
+    tooltip.style.display = "none";
+  }
+</script>
+
+</body>
+</html>

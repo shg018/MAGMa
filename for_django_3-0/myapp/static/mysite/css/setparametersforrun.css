@@ -1,0 +1,105 @@
+/* @import url('https://fonts.googleapis.com/css?family=Nunito+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Libre+Caslon+Text&display=swap'); */
+
+div
+{
+    border: 0px solid red;
+}
+
+#left
+{
+    float: left;
+    width: 50%;
+    }
+
+#right
+{
+    float: right;
+    width: 49%;
+}
+
+#center
+{
+    width: 60%; 
+    margin: 0px auto;
+}
+#center_1
+{
+    width: 30%; 
+    margin: 0px auto;
+}
+
+span.circle {
+    background: #e3e3e3;
+    border-radius: 50%;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    color: #6e6e6e;
+    display: inline-block;
+    font-weight: bold;
+    line-height: 70px;
+    margin-right: 5px;
+    text-align: center;
+    width: 70px;
+}
+
+span.circle-question {
+    background: #e3e3e3;
+    border-radius: 50%;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    color: #6e6e6e;
+    display: inline-block;
+    font-weight: bold;
+    line-height: 30px;
+    margin-right: 5px;
+    text-align: center;
+    width: 30px;
+}
+
+h3, span.circle {
+    display: inline-block;
+}
+
+#errorexpanded {
+  display: none;
+}
+
+/* Tooltip container */
+.custom-tooltip-container {
+ position: relative;
+ display: inline-block;
+ /* If you want dots under the hoverable text */
+ /* border-bottom: 1px dotted black;  */
+ cursor: pointer;
+}
+/* Tooltip text */
+.custom-tooltip-container .custom-tooltip-tooltiptext {
+visibility: hidden;
+ /* This one is to set how much text fits in one line */
+ width: 800px;
+ background-color: #555;
+ color: #fff;
+ text-align: center;
+ padding: 5px 0;
+ border-radius: 6px;
+
+ /* Position the tooltip text */
+ position: absolute;
+ z-index: 1;
+ top: 125%;
+ left: 50%;
+ margin-left: -1px;
+
+ /* Fade in tooltip */
+ opacity: 0;
+ transition: opacity 0.3s;
+}
+
+.custom-tooltip-container:hover > .custom-tooltip-tooltiptext {
+    visibility: visible;
+    opacity: 1;
+    z-index: 100;
+}
+
+

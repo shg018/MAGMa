@@ -1,0 +1,5 @@
+﻿File,Channel,Label,Control
+REV,Heavy,WT,FALSE
+REV,Light,EV,TRUE
+FWD,Heavy,EV,TRUE
+FWD,Light,WT,FALSE

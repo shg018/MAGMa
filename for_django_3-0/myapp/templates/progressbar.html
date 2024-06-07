@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Downloads</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="/static/mysite/css/setparametersforrun.css">
+  <!-- Google tag (gtag.js) -->
+  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-75GB1DLLMT"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-75GB1DLLMT');
+        </script> -->
+  <style>
+    div {
+      border: 0px solid red;
+    }
+
+    #left {
+      float: left;
+      width: 50%;
+    }
+
+    #right {
+      float: right;
+      width: 49%;
+    }
+
+    #center {
+      width: 60%;
+      margin: 0px auto;
+    }
+
+    #center_1 {
+      width: 30%;
+      margin: 0px auto;
+    }
+
+    span.circle {
+      background: #e3e3e3;
+      border-radius: 50%;
+      -moz-border-radius: 50%;
+      -webkit-border-radius: 50%;
+      color: #6e6e6e;
+      display: inline-block;
+      font-weight: bold;
+      line-height: 70px;
+      margin-right: 5px;
+      text-align: center;
+      width: 70px;
+    }
+
+    h3,
+    span.circle {
+      display: inline-block;
+    }
+
+    #errorexpanded {
+      display: none;
+    }
+
+    .responsiveLeft {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      position: absolute;
+      top: 50%;
+      left: 20%;
+      -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+    }
+    .responsiveRight {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      position: absolute;
+      top: 50%;
+      left: 60%;
+      -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+    }
+  </style>
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="/static/mysite/css/style.css">
+</head>
+
+<body style="background-color:white;">
+  <!-- #d6cbd3 -->
+  <nav class="navbar navbar-expand-sm navbar-light fixed-top bg-light">
+    <a class="navbar-brand d-none d-sm-block" href="{% url 'index' %}">Magma: Quantification and analysis of MS data</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+      aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="{% url 'index' %}">Home<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item ml-sm-3">
+          <a class="nav-link" href="{% url 'downloads' %}">Downloads</a>
+        </li>
+        <li class="nav-item ml-sm-3">
+          <a class="nav-link" href="{% url 'about' %}">About</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <br>
+  <br>
+  <br>
+  <br>
+  <div id="center">
+    <h3>Done!</h3>
+  </div>
+  <footer class="navbar navbar-expand-sm navbar-light fixed-bottom bg-light">
+    <div class="responsive text-center small footer-text">
+      <span class="text-muted">
+        Designed by <a href="mailto:sg2369@cornell.edu">Shagun Gupta</a> | © 2023-2023 <a
+          href="https://www.yulab.org">Haiyuan Yu</a>
+      </span>
+    </div>
+  </footer>
+</body>
+</html>

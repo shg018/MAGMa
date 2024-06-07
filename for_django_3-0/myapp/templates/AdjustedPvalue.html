@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Magma for calculating adjusted P-value</title>
+        <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> -->
+        <link rel="stylesheet" type="text/css" href="/static/mysite/css/setparametersforrun.css">
+        <link rel="stylesheet" type="text/css" href="/static/mysite/css/bootstrap.min.css">
+        <!-- Google tag (gtag.js) -->
+        <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-75GB1DLLMT"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-75GB1DLLMT');
+        </script> -->
+        <style>
+            div
+            {
+                border: 0px solid red;
+            }
+
+            #left
+            {
+                float: left;
+                width: 50%;
+                }
+
+            #right
+            {
+                float: right;
+                width: 49%;
+            }
+            
+            #center
+            {
+                width: 60%; 
+                margin: 0px auto;
+            }
+            #center_1
+            {
+                width: 30%; 
+                margin: 0px auto;
+            }
+
+            span.circle {
+                background: #e3e3e3;
+                border-radius: 50%;
+                -moz-border-radius: 50%;
+                -webkit-border-radius: 50%;
+                color: #6e6e6e;
+                display: inline-block;
+                font-weight: bold;
+                line-height: 70px;
+                margin-right: 5px;
+                text-align: center;
+                width: 70px;
+            }
+
+            h3, span.circle {
+                display: inline-block;
+            }
+
+            #errorexpanded {
+              display: none;
+            }
+        </style>
+    </head>
+
+    <body  style="background-color:white;">
+      <!-- #d6cbd3 -->
+      <nav class="navbar navbar-expand-sm navbar-light fixed-top bg-light">
+        <a class="navbar-brand d-none d-sm-block" href="{% url 'index' %}">Magma: Quantification and analysis of MS data</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'index' %}">Home<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item ml-sm-3">
+                    <a class="nav-link" href="{% url 'downloads' %}">Downloads</a>
+                </li>
+                <li class="nav-item ml-sm-3">
+                    <a class="nav-link" href="{% url 'about' %}">About</a>
+                </li>
+                <li class="nav-item ml-sm-3">
+                    <a class="nav-link" href="{% url 'usage' %}">Help</a>
+                  </li>
+            </ul>
+        </div>
+      </nav>
+<br>
+<br>
+<br>
+<br>
+      <div id="center">
+       
+       {% if not run_success %}
+
+        <form action="{% url 'AdjustedPvalue' %}" method="post" enctype="multipart/form-data">
+
+            {% csrf_token %}
+
+            {{ message_adjustedpvalue }}
+            <h3 style="color:#588c7e"> Upload the file with calculated P-values for Benjamini Hochberg correction</h3>  
+            <p> For more information: <span class="custom-tooltip-container">
+              <span class="circle-question"> ? </span>
+                <span class="custom-tooltip-tooltiptext">
+                  This file should have the following two columns - "Protein" and "pval"
+                  Important to ensure that calculated P-value column does not have empty/ NAN. 
+                  Otherwise result file would be a subset of input file (rows with NAN in "pval" will be removed).
+                  <br><br>NOTE: File name should not have spaces, should be short, have no special characters like "+" and should be ".csv" format.
+                  
+                </span>
+              </span>
+            </p>
+       
+            <p>{{ form_adjustedpvalue.non_field_errors }}</p>
+
+            <p>{{ form_adjustedpvalue.docfile_volcano.label_tag }} {{ form_adjustedpvalue.docfile_volcano.help_text }}</p>
+
+            <p>
+                {{ form_adjustedpvalue.docfile_volcano.errors }}
+                {{ form_adjustedpvalue.docfile_volcano }}
+            </p>
+            
+            <!-- {{ message_adjustedpvalue }}
+            <h3 style="color:#588c7e"> Upload the file with calculated P-values for Benjamini Hochberg correction</h3>  
+            <p> For more information: <span class="custom-tooltip-container">
+              <span class="circle-question"> ? </span>
+                <span class="custom-tooltip-tooltiptext">
+                  This file should have the following two columns - "Protein" and "pval"
+                  Important to ensure that calculated P-value column does not have empty/ NAN. 
+                  Otherwise result file would be a subset of input file (rows with NAN in "pval" will be removed).
+                  <br><br>NOTE: File name should not have spaces, should be short, have no special characters like "+" and should be ".csv" format.
+                  
+                </span>
+              </span>
+            </p>
+       
+            <p>{{ form_adjustedpvalue.non_field_errors }}</p>
+
+            <p>{{ form_adjustedpvalue.docfile_adjustedpvalue.label_tag }} {{ form_adjustedpvalue.docfile_adjustedpvalue.help_text }}</p>
+
+            <p>
+                {{ form_adjustedpvalue.docfile_adjustedpvalue.errors }}
+                {{ form_adjustedpvalue.docfile_adjustedpvalue }}
+            </p> -->
+
+            <p><input type="submit" value="Submit">
+            <input type="reset" value="Reset"></p>
+            {% load static %}
+            <a href="{% static 'Control-PML_example.csv' %}" download>Sample file</a>
+           
+
+             
+        </form>
+            {% endif %}
+       
+       
+       
+  
+
+
+  
+   <br><br><br>
+
+    {% if run_success %}
+    {% load static %}
+    <h2 style="color:#057518" > File generated with adjusted P-values under column "adjpval" </h2>
+    <a href="{% static result_file_name %} " download>Click Here to Download the Result File</a>
+  
+    {% endif %}
+
+    </div>
+
+     
+
+    
+   
+  
+
+
+    </body>
+</html>

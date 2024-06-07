@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Webtool for processing TMT-MS data</title>
+        <style>
+            div
+            {
+                border: 0px solid red;
+            }
+
+            #left
+            {
+                float: left;
+                width: 50%;
+                }
+
+            #right
+            {
+                float: right;
+                width: 49%;
+            }
+            
+            #center
+            {
+                width: 60%; 
+                margin: 0px auto;
+            }
+            #center_1
+            {
+                width: 30%; 
+                margin: 0px auto;
+            }
+        </style>
+    </head>
+
+
+    <body style="background-color:#d6cbd3;">
+          <div id="center">
+           <h1 style="color:#750505;">Yu Lab's web tool for processing TMT-MS data</h1><br>
+           </div>
+             <div id="right">
+            <h3><a href="{% url 'TMTalltypes' %}"> Take Me to the Home Page</a></h3>
+            </div>
+           <div id="center">
+           <br><br><br><br><h3 style="color:red;">ERROR! The bait Uniprot ID you provided is not found in the input file! Please go back to home page and resubmit with a correct id</h3><br>
+
+           
+    </body>
+</div>
+</html>

@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Magma for IP-TMT Mut or drug treatment</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <!-- Google tag (gtag.js) -->
+  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-75GB1DLLMT"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-75GB1DLLMT');
+        </script> -->
+  <style>
+    div {
+      border: 0px solid red;
+    }
+
+    #left {
+      float: left;
+      width: 50%;
+    }
+
+    #right {
+      float: right;
+      width: 49%;
+    }
+
+    #center {
+      width: 60%;
+      margin: 0px auto;
+    }
+
+    #center_1 {
+      width: 30%;
+      margin: 0px auto;
+    }
+
+    span.circle {
+      background: #e3e3e3;
+      border-radius: 50%;
+      -moz-border-radius: 50%;
+      -webkit-border-radius: 50%;
+      color: #6e6e6e;
+      display: inline-block;
+      font-weight: bold;
+      line-height: 70px;
+      margin-right: 5px;
+      text-align: center;
+      width: 70px;
+    }
+
+    h3,
+    span.circle {
+      display: inline-block;
+    }
+
+    #errorexpanded {
+      display: none;
+    }
+  </style>
+</head>
+
+<body style="background-color:white;">
+  <!-- #d6cbd3 -->
+  <nav class="navbar navbar-expand-sm navbar-light fixed-top bg-light">
+    <a class="navbar-brand d-none d-sm-block" href="{% url 'index' %}">Magma: Quantification and analysis of MS data</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+      aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="{% url 'index' %}">Home<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item ml-sm-3">
+          <a class="nav-link" href="{% url 'downloads' %}">Downloads</a>
+        </li>
+        <li class="nav-item ml-sm-3">
+          <a class="nav-link" href="{% url 'about' %}">About</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <br>
+  <br>
+  <br>
+  <br>
+  <div id="center">
+    <!-- <h1 style="color:#750505;">Yu Lab's web tool for processing TMT-MS data</h1><br> -->
+
+    <!-- <div id="right">
+            <h3><a href="{% url 'home' %}"> Home Page</a></h3>
+        </div> -->
+
+
+    {% if not run_success %}
+
+    <form action="{% url 'TMT' %}?analysisType={{ analysis_type }}" method="post" enctype="multipart/form-data">
+
+      {% csrf_token %}
+      {{ message_3 }}
+      <span class="circle">1</span>
+      <h3 style="color:#588c7e"> Upload the 'Annotation file'</h3>
+
+
+      <p>{{ form_3.non_field_errors }}</p>
+
+      <p>{{ form_3.docfile_3.label_tag }} {{ form_3.docfile_3.help_text }}</p>
+
+      <p>
+        {{ form_3.docfile_3.errors }}
+        {{ form_3.docfile_3 }}
+      </p>
+
+      <p><input type="submit" value="Submit">
+        <input type="reset" value="Reset">
+      </p>
+      {% load static %}
+      <a href="{% static 'annotation.csv' %}" download>Sample file</a>
+
+
+
+    </form>
+    {% endif %}
+
+
+    {% if condition_comb_vs_cntrl%}
+    <form action="{% url 'TMT' %}?analysisType={{ analysis_type }}" method="post" enctype="multipart/form-data">
+      <span class="circle">2</span>
+      <h3 style="color:#0e5035">Select the Comparison You Would Like to Perform</h3>
+      <h6 style="color:#588c7e"> Choose a comparison with control </h6>
+      {%for comb in condition_comb_vs_cntrl%}
+      <label><input type="radio" name="combinations" value="{{ comb }}_IsC">{{ comb }}</label><br>
+      {% endfor %}
+      <br>
+
+      {% if condition_comb_no_cntrl%}
+      <h6 style="color:#588c7e"> OR Choose a comparison NOT with control </h6>
+      {%for comb in condition_comb_no_cntrl%}
+      <label><input type="radio" name="combinations" value="{{ comb }}_NotC">{{ comb }}</label><br>
+      {% endfor %}
+      <br>
+      <br>
+      <h6 style="color:#588c7e"> Choose the direction for comparison:</h6>
+
+      <label><input type="radio" name="Analysis Direction" value="+1">(Condition_1/Condition_2)</label><br>
+      <label><input type="radio" name="Analysis Direction" value="-1">(Condition_2/Condition_1)</label><br>
+
+      <p><input type="reset" value="Reset"></p>
+
+
+      <!-- {% endif %} 
+      </form>-->
+  </div>
+
+  <div id="center">
+    <!-- <form action="{% url 'TMT' %}" method="post" enctype="multipart/form-data"> -->
+
+
+
+
+    <!-- Upload form. Note enctype attribute! -->
+
+
+    {% csrf_token %}
+    {{ message_1}}
+
+    <span class="circle">3</span>
+    <h3 style="color:#563f46">Upload a tab separated PD text file with "S/N" values</h3>
+
+    <p>{{ form_1.non_field_errors }}</p>
+
+    <p>{{ form_1.docfile_1.label_tag }} {{ form_1.docfile_1.help_text }}</p>
+
+    <p>
+      {{ form_1.docfile_1.errors }}
+      {{ form_1.docfile_1 }}
+    </p>
+
+    <p>
+      <input type="reset" value="Reset">
+    </p>
+    <a href="{% static 'CACO2-M-N-ORF3A-ORF6-0503HPH-SN_DownSampled.txt' %}" download>Sample file</a>
+
+
+
+    <br>
+
+
+    {% csrf_token %}
+    {{ message_2 }}
+    <span class="circle">4</span>
+    <h3 style="color:#5f2672">Upload a tab separated PD text file with "Intensity" values</h3>
+
+    <p>{{ form_2.non_field_errors }}</p>
+
+    <p>{{ form_2.docfile_2.label_tag }} {{ form_2.docfile_2.help_text }}</p>
+
+    <p>
+      {{ form_2.docfile_2.errors }}
+      {{ form_2.docfile_2 }}
+    </p>
+
+    <p>
+      <input type="reset" value="Reset">
+    </p>
+    <a href="{% static 'CACO2-M-N-ORF3A-ORF6-0503HPH-INTENSITY_DownSampled.txt' %}" download>Sample file</a>
+
+    <br>
+
+    <span class="circle">5</span>
+    <h3 style="color:#0b3f61">Choose type of column-type normalization: </h3>
+    <p>
+      <label><input type="radio" checked="checked" name="columnnorm" value="globalnorm">Global Normalization<span
+          class="checkmark"></span></label><br>
+      <label><input type="radio" name="columnnorm" value="protnorm">Protein-list Normalization<span
+          class="checkmark"></span></label><br>
+      <label><input type="radio" name="columnnorm" value="nocolumnnorm">No Column Normalization<span
+          class="checkmark"></span></label><br>
+    </p>
+
+    <div id="errorexpanded">
+      {% csrf_token %}
+      <h5>Input the uniprot ID's comma separated.<br> Example: P16140,P39107,P04806.</h5>
+      <!-- <p>{{ form_prot_norm.non_field_errors }}</p>
+
+              <p>{{ form_prot_norm.uniprot_to_normby.help_text }}</p>
+
+              <p>
+                  {{ form_prot_norm.uniprot_to_normby.errors }}
+                  {{ form_prot_norm.uniprot_to_normby }} 
+                  
+              <p>  -->
+      <input type="reset" value="Reset"></p>
+      <!-- <input type="text" id="uniprotsNorm" name="norm_by_uniprots" style="height: 200px; background-color: #a4acba; border-color: black;"> -->
+    </div>
+
+    <script>
+      document.querySelectorAll('input[type="radio"][name="columnnorm"]').forEach(e => {
+        e.addEventListener('change', function () {
+          if (this.value == "protnorm") {
+            errorexpanded.style.display = "block";
+          } else {
+            errorexpanded.style.display = "none";
+          }
+        })
+      })
+    </script>
+
+
+
+
+
+    {% csrf_token %}
+    <span class="circle">6</span>
+    <h3 style="color:#0b3f61">Enter the Uniprot ID of your bait below: </h3>
+
+    <p>{{ form_4.non_field_errors }}</p>
+
+    <p>{{ form_4.bait_name.help_text }}</p>
+
+    <p>
+      {{ form_4.bait_name.errors }}
+      {{ form_4.bait_name }}
+      <input type="text" name="annotation_file" value={{annotation_file_name}}>
+
+
+    <p>
+      <input type="reset" value="Reset">
+    </p>
+
+
+    <b>{{bait_message}}</b>
+
+    <b><input type="submit" value="Run the Analysis"
+        style="height:50px; width:300px; font-size: 30px; color: purple; border: 2px solid rgb(37, 34, 34)"></b>
+
+    <b>{{submit_message}}</b>
+    <b>{{bait_message}}</b>
+    <br><b>{{file_annotation_1}}
+      <br><br>
+      <p style="color:red;"> {{validation_1}} </p>
+      </form>
+
+      {% endif %}
+
+
+
+      <br><br><br>
+
+      {% if run_success %}
+      {% load static %}
+      <h2 style="color:#057518"> Success! </h2>
+      <a href="{% static result_file_name %} " download>Click Here to Download the Result File</a>
+      <br><br>
+      <a href="{% static volcano_baseline %} " download>Click Here to Download the baseline Volcano plot (PDF)</a>
+      <h3> (The Result file and baseline volcano plot has also been created in the "Result" folder) </h3>
+
+      <!--Display the sliders here-->
+      <style>
+        .slidecontainer {
+          width: 100%;
+        }
+
+        .slider {
+          -webkit-appearance: none;
+          width: 100%;
+          height: 25px;
+          background: #d3d3d3;
+          outline: none;
+          opacity: 0.7;
+          -webkit-transition: .2s;
+          transition: opacity .2s;
+        }
+
+        .slider:hover {
+          opacity: 1;
+        }
+
+        .slider::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          appearance: none;
+          width: 25px;
+          height: 25px;
+          background: #04AA6D;
+          cursor: pointer;
+        }
+
+        .slider::-moz-range-thumb {
+          width: 25px;
+          height: 25px;
+          background: #04AA6D;
+          cursor: pointer;
+        }
+      </style>
+
+
+      <!--Area for displaying the volcano plot optimization-->
+      <!-- Load d3.js -->
+      <script src="https://d3js.org/d3.v4.js"></script>
+      <h1>Custom Range Sliders</h1>
+
+
+      <div class="slidecontainer">
+        <p>FC cutoff choice: Drag the slider to display the current value.</p>
+        <input type="range" min="1" max="10" step="0.1" value="2" name="fcSlider" class="slider" id="fcRange">
+        <p>Value: <span id="fcValue"></span></p>
+
+        <p>P-value cutoff choice: Drag the slider to display the current value.</p>
+        <input type="range" min="0.000005" max="0.05" step="0.00005" value="0.05" name="pvalSlider" class="slider"
+          id="pvalRange">
+        <p>Value: <span id="pvalValue"></span></p>
+
+      </div>
+
+      <!-- <div class="row align-items-center">
+        <div class="col-sm-2"><p id="value-color-picker"></p></div>
+        <div class="col-sm"><div id="slider-color-picker"></div></div>
+    </div> -->
+
+      <!-- Create a div where the graph will take place -->
+      <div id="my_dataviz"></div>
+      <br>
+      <!-- <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> -->
+      <!-- <div id="networkplot"></div> -->
+      <!-- <script src="https://gw.alipayobjects.com/os/lib/antv/g6/4.3.11/dist/g6.min.js"></script> -->
+      {% load static %}
+      <script>
+
+
+        // set the dimensions and margins of the graph
+        // var margin = {top: 10, right: 30, bottom: 30, left: 60},
+        //     widthvolc = 860 - margin.left - margin.right,
+        //     heightvolc = 800 - margin.top - margin.bottom;
+
+        var margin = { top: 50, right: 30, bottom: 30, left: 60 },
+          widthvolc = 860 - margin.left - margin.right,
+          heightvolc = 600 - margin.top - margin.bottom;
+
+
+
+        // append the svg object to the body of the page
+        var svg = d3.select("#my_dataviz")
+          .append("svg")
+          .attr("width", widthvolc + margin.left + margin.right)
+          .attr("height", heightvolc + margin.top + margin.bottom)
+          .append("g")
+          .attr("transform",
+            "translate(" + margin.left + "," + margin.top + ")");
+
+        //Read the data
+        var filename_volcano_plot = "{% static result_file_name %}";
+        //alert(filename_volcano_plot);
+        filename_volcano_plot = filename_volcano_plot.replace(".xlsx", ".csv");
+
+        //TODO - static file not found and app dies as a result
+        //filename_volcano_plot = filename_volcano_plot.replace("static/","Results/");
+        //alert(filename_volcano_plot);
+        var sliderFC = document.getElementById("fcRange");
+        var outputFC = document.getElementById("fcValue");
+        outputFC.innerHTML = sliderFC.value; // Display the default FC slider value
+
+        // Update the FC slider value (each time you drag the slider handle)
+        sliderFC.oninput = function () {
+          outputFC.innerHTML = this.value;
+        }
+
+        var sliderPval = document.getElementById("pvalRange");
+        var outputPval = document.getElementById("pvalValue");
+        outputPval.innerHTML = sliderPval.value; // Display the default FC slider value
+
+        // Update the Pvalue slider value (each time you drag the slider handle)
+        sliderPval.oninput = function () {
+          outputPval.innerHTML = this.value;
+        }
+
+        d3.csv(filename_volcano_plot, function (data) {
+          //alert(output.innerHTML);
+
+
+          data.forEach(function (d) {
+            d.neglogpval = +d.neglogpval;
+            d.log2FC = +d.log2FC;
+            d.genesymbol = d.genesymbol;
+          });
+
+          // #TODO filter data by # PSMs
+          // data.filter(function(d){ return  (d.name == "toto" || d.name == "tutu") })
+
+          var height_yaxis = d3.max(data, function (d) { return d.neglogpval; });
+          var pos_width_xaxis = d3.max(data, function (d) { return d.log2FC; });
+          var neg_width_xaxis = d3.min(data, function (d) { return d.log2FC; });
+          var x_range = d3.max([pos_width_xaxis, -1.0 * neg_width_xaxis]);
+          // alert(height_yaxis);
+          // alert(pos_width_xaxis);
+          // alert(x_range);
+
+          // Add X axis
+          var x = d3.scaleLinear()
+            .domain([-1.0 * x_range, x_range])
+            // .domain([0, 1000])
+            .range([0, widthvolc]);
+          svg.append("g")
+            .attr("transform", "translate(0," + heightvolc + ")")
+            .call(d3.axisBottom(x));
+
+
+          // Add Y axis
+          var y = d3.scaleLinear()
+            .domain([0, height_yaxis])
+            // .domain([0,800])
+            .range([heightvolc, x_range]);
+          svg.append("g")
+            .attr("transform", "translate(" + widthvolc / 2 + ",0)")
+            .call(d3.axisLeft(y));
+
+
+          // alert(heightvolc);
+          // alert(outputFC.innerHTML);
+
+          var FCval = Math.log2(outputFC.innerHTML);
+          var pvalcutoff = -1.0 * Math.log10(outputPval.innerHTML);
+
+          // alert(FCval);
+
+          var tooltip = d3.select("#my_dataviz")
+            .append("g")
+            .style("position", "absolute")
+            .style("z-index", "10")
+            .style("visibility", "hidden")
+            .style("background", "#FFFFFF")
+            .text("a simple tooltip");
+
+          function hexcodeScatter(d, FCval, pvalcutoff) {
+            if ((d.log2FC >= FCval) && (d.neglogpval >= pvalcutoff)) { return "#31a354"; }
+            else if ((d.log2FC >= FCval) && (d.neglogpval < pvalcutoff)) { return "#a1d99b"; }
+            else if (((d.log2FC < FCval) && (d.log2FC > -1.0 * FCval)) && (d.neglogpval >= pvalcutoff)) { return "#636363"; }
+            else if (((d.log2FC < FCval) && (d.log2FC > -1.0 * FCval)) && (d.neglogpval < pvalcutoff)) { return "#bdbdbd"; }
+            else if ((d.log2FC <= -1.0 * FCval) && (d.neglogpval >= pvalcutoff)) { return "#de2d26"; }
+            else { return "#fc9272"; }
+
+          }
+
+          // Add dots for scatter plot
+          var scatter = svg.append('g')
+            .selectAll("dot")
+            .data(data)
+            .enter()
+            .append("circle")
+            .attr("cx", function (d) { return x(d.log2FC); })
+            .attr("cy", function (d) { return y(d.neglogpval); })
+            .attr("r", 5)
+            .style("fill", function (d) { return hexcodeScatter(d, FCval, pvalcutoff); })
+            //.text(function(d) { return d.genesymbol; })
+            .on("mouseover", function (d) { tooltip.text(d.genesymbol); tooltip.style("top", (event.pageY - d.neglogpval + 3) + "px"); tooltip.style("left", (event.pageX - d.log2FC + 3) + "px"); return tooltip.style("visibility", "visible"); })
+            .on("mouseout", function () { return tooltip.style("visibility", "hidden"); });
+
+
+
+
+
+
+          // A function that update the chart when slider is moved?
+          function updateChart(FCval, pvalcutoff) {
+            // // update the chart
+            scatter = svg.append('g')
+              .selectAll("dot")
+              .data(data)
+              .enter()
+              .append("circle")
+              .attr("cx", function (d) { return x(d.log2FC); })
+              .attr("cy", function (d) { return y(d.neglogpval); })
+              .attr("r", 5)
+              .style("fill", function (d) { return hexcodeScatter(d, FCval, pvalcutoff); })
+              .on("mouseover", function (d) { tooltip.text(d.genesymbol); tooltip.style("top", (event.pageY - d.neglogpval + 3) + "px"); tooltip.style("left", (event.pageX - d.log2FC + 3) + "px"); return tooltip.style("visibility", "visible"); })
+              .on("mouseout", function () { return tooltip.style("visibility", "hidden"); });
+          }
+
+          // Listen to the FC slider?
+          d3.select("#fcRange").on("change", function (d) {
+            selectedValue = this.value
+            //console.log(selectedValue)
+            FCval = Math.log2(selectedValue)
+            updateChart(Math.log2(selectedValue), pvalcutoff)
+          });
+
+          // Listen to the Pvalue slider?
+          d3.select("#pvalRange").on("change", function (d) {
+            selectedValue = this.value
+            //console.log(selectedValue)
+            pvalcutoff = -1.0 * Math.log10(selectedValue)
+            updateChart(FCval, -1.0 * Math.log10(selectedValue))
+          });
+          // var hypercurvedat = hyperbolicRightCurve(Array.from({ length: x_range - 1 + 1 }, (_, i) => i),outputFC.innerHTML,0.4);
+          // alert(hypercurvedat);
+          // // Plot the hyperbolic curve with slider values
+          // var curve = svg
+          //     .append('g')
+          //     .append("path")
+          //     .attr("class", "mypath")
+          //     .datum(hypercurvedat)
+          //     .attr("fill", "#69b3a2")
+          //     .attr("opacity", ".8")
+          //     .attr("stroke", "#000")
+          //     .attr("stroke-width", 1)
+          //     .attr("stroke-linejoin", "round")
+          //     .attr("d",  d3.line()
+          //         .curve(d3.curveBasis)
+          //         .x(function(d) { return x(d[0]); })
+          //         .y(function(d) { return y(d[1]); })
+          //     );
+        });
+
+        function hyperbolicRightCurve(X, c, x0plot) {
+          return X.map(function (x) {
+            return [x, c / (i - 2 * x0plot)];
+          });
+        }
+
+        // const datanetwork = {
+        //     nodes: [
+        //         {
+        //         id: "node1",
+        //         label: "Circle1",
+        //         x: 150,
+        //         y: 150
+        //         },
+        //         {
+        //         id: "node2",
+        //         label: "Circle2",
+        //         x: 400,
+        //         y: 150
+        //         }
+        //     ],
+        //     edges: [
+        //         {
+        //         source: "node1",
+        //         target: "node2"
+        //         }
+        //     ]
+        //     };
+
+        //     const graph = new G6.Graph({
+        //     container: "networkplot",
+        //     width: 800,
+        //     height: 500,
+        //     defaultNode: {
+        //         type: "circle",
+        //         size: [100],
+        //         color: "#5B8FF9",
+        //         style: {
+        //         fill: "#9EC9FF",
+        //         lineWidth: 3
+        //         },
+        //         labelCfg: {
+        //         style: {
+        //             fill: "#fff",
+        //             fontSize: 20
+        //         }
+        //         }
+        //     },
+        //     defaultEdge: {
+        //         style: {
+        //         stroke: "#e2e2e2"
+        //         }
+        //     }
+        //     });
+
+        //     graph.data(datanetwork);
+        //     graph.render();
+
+      </script>
+
+
+
+
+      <style type="text/css">
+        circle.node {
+          fill: lightsteelblue;
+          stroke: #555;
+          stroke-width: 3px;
+        }
+
+        circle.leaf {
+          stroke: #fff;
+          stroke-width: 1.5px;
+        }
+
+        path.hull {
+          fill: lightsteelblue;
+          fill-opacity: 0.3;
+        }
+
+        line.link {
+          stroke: #333;
+          stroke-opacity: 0.5;
+          pointer-events: none;
+        }
+      </style>
+      <!-- <script type="text/javascript">
+        // The source data
+          const data = {
+            // The array of nodes
+            nodes: [
+              {
+                id: 'node1',
+                x: 100,
+                y: 200,
+              },
+              {
+                id: 'node2',
+                x: 300,
+                y: 200,
+              },
+            ],
+            // The array of edges
+            edges: [
+              // An edge links from node1 to node2
+              {
+                source: 'node1',
+                target: 'node2',
+              },
+            ],
+          };
+
+          // Instantiate the Graph
+          const graph = new G6.Graph({
+            container: 'mountNode', // The container id or HTML node of the graph canvas.
+            // The width and the height of graph canvas
+            width: 800,
+            height: 500,
+          });
+          // Load the data
+          graph.data(data);
+          // Render the graph
+          graph.render();
+    </script> -->
+      {%endif%}
+
+  </div>
+
+
+
+
+
+
+
+
+</body>
+
+</html>

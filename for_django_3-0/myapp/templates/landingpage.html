@@ -1,0 +1,276 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Magma Home page</title>
+  <!-- <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script> -->
+  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> -->
+  <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script> -->
+  <!-- <style>
+        @media (max-width: 1388px) {
+            body {min-width: 1388px;}
+        }
+    </style>
+    {% load static %} -->
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75GB1DLLMT"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-75GB1DLLMT');
+  </script>
+  <style>
+    @media (max-width: 1388px) {
+      body {
+        min-width: 1388px;
+      }
+    }
+  </style>
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="/static/mysite/css/style.css">
+  <link rel="stylesheet" type="text/css" href="/static/mysite/css/bootstrap.min.css">
+
+</head>
+
+<body style="background-color:white;">
+
+  <!-- <nav>
+    <div class="topnav">
+      <a href="{% url 'index' %}">Magma: Quantification and analysis of MS data</a>
+      <div class="topnav-right">
+        <a href="{% url 'index' %}">Home</a>
+        <a href="{% url 'downloads' %}">Downloads</a>
+        <a href="{% url 'about' %}">About</a>
+      </div>
+    </div>
+  </nav> -->
+
+  <nav class="navbar navbar-expand-sm navbar-light fixed-top bg-light">
+    <a class="navbar-brand d-none d-sm-block" href="{% url 'index' %}">Magma: Quantification and analysis of MS data</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+      aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="{% url 'index' %}">Home<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item ml-sm-3">
+          <a class="nav-link" href="{% url 'downloads' %}">Downloads</a>
+        </li>
+        <li class="nav-item ml-sm-3">
+          <a class="nav-link" href="{% url 'about' %}">About</a>
+        </li>
+        <li class="nav-item ml-sm-3">
+          <a class="nav-link" href="{% url 'usage' %}">Help</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <img src="{% static 'mysite/images/LAVA-PipelineLogo.svg' %}" class="responsive" style="width:25%"></img>
+
+  {% comment %}
+  <script src="{% static 'mysite/javascripts/tooltips.js' %}"></script> {% endcomment %}
+
+  <div id="tooltip" display="none" style="position: absolute; display: none;"></div>
+
+  <div class="responsive">
+    <svg width="1558" height="950" viewBox="640 -200 150 1000" class="arcs">
+
+      <a href="{% url 'volcanoplot' %}">
+        <path onmousemove="showTooltipLeftVolcano(evt, 'This is for volcano plot');" onmouseout="hideTooltip();"
+          id="button1" fill="#FCEE21" stroke="black" stroke-width="0.1" id="1-arc"
+          d="M 187.07 -77.49 A 202.4845673 202.4845673 0 0 0 77.49 -187.07 L 51.66 -124.71 A 134.9897115 134.9897115 0 0 1 124.71 -51.66 Z"
+          transform="translate(716, 285)" style="opacity: 1" align="center">
+          <title>volcano</title>
+        </path>
+      </a>
+      <a href="{% url 'FilterForIP' %}">
+        <path onmousemove="showTooltipLeftNetwork(evt, 'This is for finalizing Condition 1 vs Condition 2 comparison for IP experiments.');" onmouseout="hideTooltip();"
+          id="button2" fill="#FBB03B" stroke="black" stroke-width="0.1" id="2-arc"
+          d="M 187.07 -77.49 A 202.4845673 202.4845673 0 0 1 187.07 77.49 L 124.71 51.66 A 134.9897115 134.9897115 0 0 0 124.71 -51.66 Z"
+          transform="translate(716, 285)" style="opacity: 1">
+          <title>network</title>
+        </path>
+      </a>
+      <a href="https://www.google.com">
+        <path
+          onmousemove="showTooltipLeftQC(evt, 'This is for generating quality check plots. <br> Use for converting file(s) to correct format is using MSFragger or MaxQuant for search.');"
+          onmouseout="hideTooltip();" id="button3" fill="#F15A24" stroke="black" stroke-width="0.1" id="3-arc"
+          d="M 187.07 77.49 A 202.4845673 202.4845673 0 0 1 77.49 187.07 L 51.66  124.71 A 134.9897115 134.9897115 0 0 0 124.71 51.66 Z"
+          transform="translate(716, 285)" style="opacity: 1">
+          <title>QC</title>
+        </path>
+      </a>
+      <a href="{% url 'TMTalltypes' %}">
+        <path
+          onmousemove="showTooltipRightTMT(evt, 'This is for processing TMT DDA results. <br>Use AFTER searching raw MS files. <br>Can process IP-MS, Fusion-IP-MS, <br>Whole Proteome, Phospho-proteome experiments.');"
+          onmouseout="hideTooltip();" id="button4" fill="#f678fa" stroke="black" stroke-width="0.1" id="4-arc"
+          d="M -187.07 -77.49 A 202.4845673 202.4845673 0 0 1 -77.49 -187.07 L -51.66  -124.71 A 134.9897115 134.9897115 0 0 0 -124.71 -51.66 Z"
+          transform="translate(716, 285)" style="opacity: 1;">
+          <title>TMT</title>
+        </path>
+      </a>
+      <a href="{% url 'SILACalltypes' %}">
+        <path
+          onmousemove="showTooltipRightSILAC(evt, 'This is for processing SILAC DDA results. <br>Use AFTER searching raw MS files. <br>Can process IP-MS, Whole Proteome and <br> Phospho-proteome experiments.');"
+          onmouseout="hideTooltip();" id="button5" fill="#b34ede" stroke="black" stroke-width="0.1" id="5-arc"
+          d="M -187.07 -77.49 A 202.4845673 202.4845673 0 0 0 -187.07 77.49 L -124.71 51.66 A 134.9897115 134.9897115 0 0 1 -124.71 -51.66 Z"
+          transform="translate(716, 285)" style="opacity: 1;">
+          <title>SILAC</title>
+        </path>
+      </a>
+      <a href="{% url 'DIALFQ' %}">
+        <path
+          onmousemove="showTooltipRightDIA(evt, 'This is for processing DIA LFQ results. <br>Use AFTER searching raw MS files with DIA-NN. <br>Can process IP-MS, and Whole Proteome experiments.');"
+          onmouseout="hideTooltip();" id="button5" fill="#662D91" stroke="black" stroke-width="0.1" id="6-arc"
+          d="M -187.07 77.49 A 202.4845673 202.4845673 0 0 0  -77.49 187.07 L -51.66 124.71 A 134.9897115 134.9897115 0 0 1 -124.71 51.66 Z"
+          transform="translate(716, 285)" style="opacity: 1;">
+          <title>DIA-LFQ</title>
+        </path>
+      </a>
+
+      <!-- <g font-size="0.8rem" text-anchor="middle" transform="translate(679,303.5)">
+          <text transform="translate(160.28 -139.28)">
+            <tspan pointer-events="none" y="0">BUTTON1</tspan>
+          </text>
+          <text transform="translate(-80.28 -139.28)">
+            <tspan pointer-events="none" y="0">TMT Samples</tspan>
+          </text>
+        </g> -->
+    </svg>
+  </div>
+  <footer class="navbar navbar-expand-sm navbar-light fixed-bottom bg-light">
+    <div class="responsive text-center small footer-text">
+      <span class="text-muted">
+        Designed by <a href="mailto:sg2369@cornell.edu">Shagun Gupta</a> | © 2023-2023 <a
+          href="https://www.yulab.org">Yu Lab</a>
+      </span>
+    </div>
+  </footer>
+
+
+
+
+  <script>
+    // // The tooltip window scales according to window size and is not accurate compared to svg
+    // document.getElementById("MyPath").setAttribute("d", document.getElementById("Path").getAttribute("d"));
+    // var tl = new TimelineMax({
+    //   repeat: 0,
+    //   delay: 1
+    // });
+    // tl.to("#Text", 3, {
+    //   attr: {
+    //     startOffset: '50%',
+    //     opacity: 1
+    //   }
+    // });
+
+
+    // window.addEventListener('scroll', function() {
+    //   tl.to("#Text", 3, {
+    //     attr: {
+    //       startOffset: '100%',
+    //       opacity: 0
+    //     }
+    //   });
+    // }, true);
+
+    function showTooltipRightTMT(evt, text) {
+      let tooltip = document.getElementById("tooltip");
+      tooltip.innerHTML = text;
+      tooltip.style.display = "block";
+      tooltip.style.left = evt.pageX - 500 + 'px';
+      tooltip.style.top = evt.pageY - 50 + 'px';
+      tooltip.style.background = "#fff";
+      tooltip.style.opacity = "0.8";
+      tooltip.style.color = "#555";
+      tooltip.style.padding = "5px 5px";
+      tooltip.style.border = "10px solid #f678fa";
+
+    }
+
+    function showTooltipRightSILAC(evt, text) {
+      let tooltip = document.getElementById("tooltip");
+      tooltip.innerHTML = text;
+      tooltip.style.display = "block";
+      tooltip.style.left = evt.pageX - 400 + 'px';
+      tooltip.style.top = evt.pageY - 50 + 'px';
+      tooltip.style.background = "#fff";
+      tooltip.style.opacity = "0.8";
+      tooltip.style.color = "#555";
+      tooltip.style.padding = "5px 5px";
+      tooltip.style.border = "10px solid #b34ede";
+
+    }
+
+    function showTooltipRightDIA(evt, text) {
+      let tooltip = document.getElementById("tooltip");
+      tooltip.innerHTML = text;
+      tooltip.style.display = "block";
+      tooltip.style.left = evt.pageX - 500 + 'px';
+      tooltip.style.top = evt.pageY - 50 + 'px';
+      tooltip.style.background = "#fff";
+      tooltip.style.opacity = "0.8";
+      tooltip.style.color = "#555";
+      tooltip.style.padding = "5px 5px";
+      tooltip.style.border = "10px solid #662D91";
+
+    }
+
+    function showTooltipLeftVolcano(evt, text) {
+      let tooltip = document.getElementById("tooltip");
+      tooltip.innerHTML = text;
+      tooltip.style.display = "block";
+      tooltip.style.left = evt.pageX + 150 + 'px';
+      tooltip.style.top = evt.pageY + 10 + 'px';
+      tooltip.style.background = "#fff";
+      tooltip.style.opacity = "0.8";
+      tooltip.style.color = "#555";
+      tooltip.style.padding = "5px 5px";
+      tooltip.style.border = "10px solid #FCEE21";
+    }
+
+    function showTooltipLeftNetwork(evt, text) {
+      let tooltip = document.getElementById("tooltip");
+      tooltip.innerHTML = text;
+      tooltip.style.display = "block";
+      tooltip.style.left = evt.pageX + 150 + 'px';
+      tooltip.style.top = evt.pageY + 10 + 'px';
+      tooltip.style.background = "#fff";
+      tooltip.style.opacity = "0.8";
+      tooltip.style.color = "#555";
+      tooltip.style.padding = "5px 5px";
+      tooltip.style.border = "10px solid #FBB03B";
+    }
+
+    function showTooltipLeftQC(evt, text) {
+      let tooltip = document.getElementById("tooltip");
+      tooltip.innerHTML = text;
+      tooltip.style.display = "block";
+      tooltip.style.left = evt.pageX + 100 + 'px';
+      tooltip.style.top = evt.pageY + 10 + 'px';
+      tooltip.style.background = "#fff";
+      tooltip.style.opacity = "0.8";
+      tooltip.style.color = "#555";
+      tooltip.style.padding = "5px 5px";
+      tooltip.style.border = "10px solid #F15A24";
+    }
+
+    function hideTooltip() {
+      var tooltip = document.getElementById("tooltip");
+      tooltip.style.display = "none";
+    }
+  </script>
+
+</body>
+
+</html>

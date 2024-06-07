@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Magma for Filtering files for IP-MS</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/static/mysite/css/setparametersforrun.css">
+    <!-- <link rel="stylesheet" type="text/css" href="/static/mysite/css/volcano.css"> -->
+    <!-- Google tag (gtag.js) -->
+    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-75GB1DLLMT"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-75GB1DLLMT');
+        </script> -->
+    <style>
+        div {
+            border: 0px solid red;
+        }
+
+        #left {
+            float: left;
+            width: 50%;
+        }
+
+        #right {
+            float: right;
+            width: 49%;
+        }
+
+        #center {
+            width: 60%;
+            margin: 0px auto;
+        }
+
+        #center_1 {
+            width: 30%;
+            margin: 0px auto;
+        }
+
+        span.circle {
+            background: #e3e3e3;
+            border-radius: 50%;
+            -moz-border-radius: 50%;
+            -webkit-border-radius: 50%;
+            color: #6e6e6e;
+            display: inline-block;
+            font-weight: bold;
+            line-height: 70px;
+            margin-right: 5px;
+            text-align: center;
+            width: 70px;
+        }
+
+        h3,
+        span.circle {
+            display: inline-block;
+        }
+
+        #errorexpanded {
+            display: none;
+        }
+    </style>
+</head>
+
+<body style="background-color:white;">
+    <!-- #d6cbd3 -->
+    <nav class="navbar navbar-expand-sm navbar-light fixed-top bg-light">
+        <a class="navbar-brand d-none d-sm-block" href="{% url 'index' %}">Magma: Quantification and analysis of MS
+            data</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+            aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'index' %}">Home<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item ml-sm-3">
+                    <a class="nav-link" href="{% url 'downloads' %}">Downloads</a>
+                </li>
+                <li class="nav-item ml-sm-3">
+                    <a class="nav-link" href="{% url 'about' %}">About</a>
+                </li>
+                <li class="nav-item ml-sm-3">
+                    <a class="nav-link" href="{% url 'usage' %}">Help</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div id="center">
+
+        {% if not run_success %}
+
+        <form action="{% url 'FilterForIP' %}" method="post" enctype="multipart/form-data">
+
+            {% csrf_token %}
+            {{ message_filterfileforip }}
+            <span class="circle">1</span>
+            <h3 style="color:#588c7e"> Upload the Condition 1 vs Condition 2 comparison result</h3>
+            <p> For more information: <span class="custom-tooltip-container">
+                    <span class="circle-question"> ? </span>
+                    <span class="custom-tooltip-tooltiptext">
+                        This file should have the following column at the minimum - "Protein"
+                        <br><br>NOTE: File name should not have spaces, should be short, have no special characters like
+                        "+" and should be ".csv" format.
+
+                    </span>
+                </span>
+            </p>
+
+            <p>{{ form_filterfileforip.non_field_errors }}</p>
+
+            <p>{{ form_filterfileforip.docfile_filterfileforip.label_tag }} {{form_filterfileforip.docfile_filterfileforip.help_text }}</p>
+
+            <p>
+                {{ form_filterfileforip.docfile_filterfileforip.errors }}
+                {{ form_filterfileforip.docfile_filterfileforip }}
+            </p>
+
+            {% load static %}
+            <a href="{% static 'Control-PML_example.csv' %}" download>Sample file</a>
+            <br>
+            <br>
+            {% csrf_token %}
+            {{ message_uniprotfile }}
+            <span class="circle">2a</span>
+            <h3 style="color:#588c7e"> Upload the Condition 1 vs Control comparison result</h3>
+            <p> For more information: <span class="custom-tooltip-container">
+                    <span class="circle-question"> ? </span>
+                    <span class="custom-tooltip-tooltiptext">
+                        This file should have the following column at the minimum - "Protein"
+                        <br><br>NOTE: File name should not have spaces, should be short, have no special characters like
+                        "+" and should be ".csv" format.
+
+                    </span>
+                </span>
+            </p>
+
+            <p>{{ form_uniprotfile.non_field_errors }}</p>
+
+            <p>{{ form_uniprotfile.docfile_uniprotfile.label_tag }} {{ form_uniprotfile.docfile_uniprotfile.help_text }}
+            </p>
+
+            <p>
+                {{ form_uniprotfile.docfile_uniprotfile.errors }}
+                {{ form_uniprotfile.docfile_uniprotfile }}
+            </p>
+            {% load static %}
+            <a href="{% static 'Control-PML_example.csv' %}" download>Sample file</a>
+            <br>
+            {% csrf_token %}
+            {{ message_uniprotfile2 }}
+            <span class="circle">2b</span>
+            <h3 style="color:#588c7e"> Upload the Condition 2 vs Control comparison result</h3>
+            <p> For more information: <span class="custom-tooltip-container">
+                    <span class="circle-question"> ? </span>
+                    <span class="custom-tooltip-tooltiptext">
+                        This file should have the following column at the minimum - "Protein"
+                        <br><br>NOTE: File name should not have spaces, should be short, have no special characters like
+                        "+" and should be ".csv" format.
+
+                    </span>
+                </span>
+            </p>
+
+            <p>{{ form_uniprotfile2.non_field_errors }}</p>
+
+            <p>{{ form_uniprotfile2.docfile_uniprotfile2.label_tag }} {{form_uniprotfile2.docfile_uniprotfile2.help_text }}</p>
+
+            <p>
+                {{ form_uniprotfile2.docfile_uniprotfile2.errors }}
+                {{ form_uniprotfile2.docfile_uniprotfile2 }}
+            </p>
+            {% load static %}
+            <a href="{% static 'Control-PML_example.csv' %}" download>Sample file</a>
+            <br>
+            <br>
+            <br>
+            <p><input type="submit" value="Submit">
+                <input type="reset" value="Reset">
+            </p>
+
+
+
+
+        </form>
+        {% endif %}
+
+
+
+
+    </div>
+
+
+        <br><br>
+        <div id="center">
+        {% if run_success %}
+        {% load static %}
+        <h2 style="color:#057518"> File filtered using provided Uniprot ID's </h2>
+        <a href="{% static result_file_name %} " download>Click Here to Download the Result File</a>
+        <br>
+        <a href="{% static volcano_baseline_name %} " download>Click Here to Download the baseline Volcano plot
+            (PDF)</a>
+        </div>
+        <br>
+        <br>
+        <!--Display the sliders here-->
+        <style>
+            .fullcontainer {
+                display: flex;
+                flex-wrap: wrap; 
+                /* Allow wrapping to handle small screens */
+                /* display: grid; */
+                /* grid-template-columns: repeat(3, 1fr);  */
+                /* Three columns of equal width */
+                /* grid-gap: 2px;  */
+                /* Gap between grid items */
+            }
+
+            .box {
+                flex: 1 1 20%; 
+                /* Each box takes up equal space */
+                border: 3px solid #000;
+                padding: 5px;
+                box-sizing: border-box;
+            }
+            @media (max-width: 768px) {
+            .box {
+                flex-basis: 45%; /* Two boxes per row on smaller screens */
+            }
+            }
+
+            @media (max-width: 580px) {
+            .box {
+                flex-basis: 100%; /* One box per row on even smaller screens */
+            }
+            }
+
+            .slidecontainer {
+                width: 80%;
+                padding: 5px;
+                border: 3px solid #636363;
+            }
+
+            .slider {
+                width: 100%;
+                height: 25px;
+                /* background: #f0f0f0; */
+                border-radius: 5px;
+                background: #f3f3f3; /* Light gray background */
+                outline: none;
+                opacity: 0.7;
+                -webkit-transition: .2s;
+                transition: opacity .2s;
+            }
+
+            .slider:hover {
+                opacity: 1;
+            }
+
+            /* Styles for sliders' track */
+            .slider::-webkit-slider-runnable-track {
+                width: 100%;
+                height: 10px;
+                cursor: pointer;
+                /* animate: 0.2s; */
+                border-radius: 5px;
+                background: linear-gradient(to right, #9e9ac8, #54278f); /* Orange to purple gradient */
+                border: 0.2px solid #010101; /* Dark border */
+            }
+
+            /* Styles for sliders' thumb */
+            .slider::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                appearance: none;
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                background: #ffffff; /* White thumb */
+                cursor: pointer;
+                border: 2px solid #ff7f0e; /* Orange border */
+            }
+
+            /* Styles for sliders' thumb when sliding */
+            .slider::-webkit-slider-thumb:hover {
+                background: #ff7f0e; /* Orange background on hover */
+            }
+
+            /* .slider::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                appearance: none;
+                width: 25px;
+                height: 25px;
+                background: #04AA6D;
+                cursor: pointer;
+            }
+
+            .slider::-moz-range-thumb {
+                width: 25px;
+                height: 25px;
+                background: #04AA6D;
+                cursor: pointer;
+            } */
+        </style>
+
+
+        <!--Area for displaying the volcano plot optimization-->
+        <!-- Load d3.js -->
+        <script src="https://d3js.org/d3.v4.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/canvg/1.5/canvg.min.js"></script>
+        <div class="fullcontainer">
+        <div class="box">
+        <div class="slidecontainer">
+            <p>FC cutoff choice:</p>
+            <input type="range" min="1" max="10" step="0.1" value="2" name="fcSlidervsC1" class="slider" id="fcRangevsC1">
+            <p>Value: <span id="fcValuevsC1"></span></p>
+
+            <p>Adjusted P-value cutoff choice:</p>
+            <input type="range" min="0.005" max="0.5" step="0.00005" value="0.05" name="pvalSlidervsC1" class="slider"
+                id="pvalRangevsC1">
+            <p>Value: <span id="pvalValuevsC1"></span></p>
+
+            <p>PSM cutoff choice:</p>
+            <input type="range" min="0" max="100" step="5" value="5" name="psmSlidervsC1" class="slider" id="psmRangevsC1">
+            <p>Value: <span id="psmValuevsC1"></span></p>
+
+            <p>Size of scatter point:</p>
+            <input type="range" min="1" max="15" step="1" value="5" name="dotsizeSlidervsC1" class="slider"
+                id="dotsizeRangevsC1">
+            <p>Value: <span id="dotsizeValuevsC1"></span></p>
+        
+        <div class="displayinfo">
+            <!-- Get user input for proteins to highlight in the plot -->
+            <!-- Input box for CSV string -->
+            <textarea id="protein-list-input-vsC1" rows="4" cols="50" placeholder="Enter Uniprot IDs separated by @
+        Example: Q08945@Q9UQE7"></textarea>
+
+            <!-- Button to trigger plot update -->
+            <button id="update-button-vsC1">Update Volcano Plot</button>
+        </div>
+        </div>
+
+        <div id="my_dataviz_vsC1"></div>
+        </div>
+        <br>
+        <br>
+        <br>
+        <div class="box">
+        <div class="slidecontainer">
+            <p>FC cutoff choice:</p>
+            <input type="range" min="1" max="10" step="0.1" value="2" name="fcSlidervsC2" class="slider" id="fcRangevsC2">
+            <p>Value: <span id="fcValuevsC2"></span></p>
+
+            <p>Adjusted P-value cutoff choice:</p>
+            <input type="range" min="0.005" max="0.5" step="0.00005" value="0.05" name="pvalSlidervsC2" class="slider"
+                id="pvalRangevsC2">
+            <p>Value: <span id="pvalValuevsC2"></span></p>
+
+            <p>PSM cutoff choice:</p>
+            <input type="range" min="0" max="100" step="5" value="5" name="psmSlidervsC2" class="slider" id="psmRangevsC2">
+            <p>Value: <span id="psmValuevsC2"></span></p>
+
+            <p>Size of scatter point:</p>
+            <input type="range" min="1" max="15" step="1" value="5" name="dotsizeSlidervsC2" class="slider"
+                id="dotsizeRangevsC2">
+            <p>Value: <span id="dotsizeValuevsC2"></span></p>
+        
+        <div class="displayinfo">
+            <!-- Get user input for proteins to highlight in the plot -->
+            <!-- Input box for CSV string -->
+            <textarea id="protein-list-input-vsC2" rows="4" cols="50" placeholder="Enter Uniprot IDs separated by @
+        Example: Q08945@Q9UQE7"></textarea>
+
+            <!-- Button to trigger plot update -->
+            <button id="update-button-vsC2">Update Volcano Plot</button>
+        </div>
+        </div>
+        <div id="my_dataviz_vsC2"></div>
+        </div>
+        <br>
+        <br>
+        <br>
+        <div class="box">
+        <div class="slidecontainer">
+            <p>FC cutoff choice:</p>
+            <input type="range" min="1" max="10" step="0.1" value="2" name="fcSlider" class="slider" id="fcRange">
+            <p>Value: <span id="fcValue"></span></p>
+
+            <p>Adjusted P-value cutoff choice:</p>
+            <input type="range" min="0.005" max="0.5" step="0.00005" value="0.05" name="pvalSlider" class="slider"
+                id="pvalRange">
+            <p>Value: <span id="pvalValue"></span></p>
+
+            <p>PSM cutoff choice:</p>
+            <input type="range" min="0" max="100" step="5" value="5" name="psmSlider" class="slider" id="psmRange">
+            <p>Value: <span id="psmValue"></span></p>
+
+            <p>Size of scatter point:</p>
+            <input type="range" min="1" max="15" step="1" value="5" name="dotsizeSlider" class="slider"
+                id="dotsizeRange">
+            <p>Value: <span id="dotsizeValue"></span></p>
+        
+        <div class="displayinfo">
+            <!-- Get user input for proteins to highlight in the plot -->
+            <!-- Input box for CSV string -->
+            <textarea id="protein-list-input" rows="4" cols="50" placeholder="Enter Uniprot IDs separated by @
+        Example: Q08945@Q9UQE7"></textarea>
+
+            <!-- Button to trigger plot update -->
+            <button id="update-button">Update Volcano Plot</button>
+        </div>
+        </div>
+
+
+        <!-- Create a div where the graph will take place -->
+        <!-- <div id="my_dataviz_vsC1"></div>
+        <div id="my_dataviz_vsC2"></div> -->
+        <div id="my_dataviz"></div>
+        <a id="download-button" download="volcano_plot.png">
+            <button>Download Volcano Plot</button>
+        </a>
+
+        <button id="download-subset-file-button">Download Subset CSV</button>
+        
+        <br><br><br><br>
+
+        <script id="vsC1-file" type="application/text">{% static vsC1file %}</script>
+        <script id="vsC2-file" type="application/text">{% static vsC2file %}</script>
+        <script id="volcanoplot-file" type="application/text">{% static result_file_name %}</script>
+
+        <script src="{% static 'mysite/javascripts/volcanoplotgenerateC1vsC2.js' %}"></script>
+        <script src="{% static 'mysite/javascripts/subsetcsvfile.js' %}"></script>
+
+        {% endif %}
+        </div>
+        </div>
+
+    
+
+
+    <footer class="navbar navbar-expand-sm navbar-light fixed-bottom bg-light">
+        <div class="responsive text-center small footer-text">
+            <span class="text-muted">
+                Designed by <a href="mailto:sg2369@cornell.edu">Shagun Gupta</a> | © 2023-2023 <a
+                    href="https://www.yulab.org">Yu Lab</a>
+            </span>
+        </div>
+    </footer>
+
+
+
+
+
+</body>
+
+</html>

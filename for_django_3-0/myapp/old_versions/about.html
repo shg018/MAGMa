@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>About Magma</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="/static/mysite/css/setparametersforrun.css">
+  <!-- Google tag (gtag.js) -->
+  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-75GB1DLLMT"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-75GB1DLLMT');
+        </script> -->
+  <style>
+    div {
+      border: 0px solid red;
+    }
+
+    .color-box {
+      /* background-color: blue;  */
+      background-image: linear-gradient(180deg, #5e3c99, #fdb863);
+      width: 100%; 
+      height: 300px;
+    }
+
+    .content {
+      position: relative;
+      width: 100%; 
+      height: 400px;
+    }
+
+    #left {
+      float: left;
+      width: 50%;
+    }
+
+    #right {
+      float: right;
+      width: 49%;
+    }
+
+    #center {
+      width: 60%;
+      margin: 0px auto;
+    }
+
+    #center_1 {
+      width: 30%;
+      margin: 0px auto;
+    }
+
+    span.circle {
+      background: #e3e3e3;
+      border-radius: 50%;
+      -moz-border-radius: 50%;
+      -webkit-border-radius: 50%;
+      color: #6e6e6e;
+      display: inline-block;
+      font-weight: bold;
+      line-height: 70px;
+      margin-right: 5px;
+      text-align: center;
+      width: 70px;
+    }
+
+    h3,
+    span.circle {
+      display: inline-block;
+    }
+
+    #errorexpanded {
+      display: none;
+    }
+
+    .responsiveLeft {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      position: absolute;
+      top: 90%;
+      left: 20%;
+      -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+    }
+
+    .responsiveRight {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      position: absolute;
+      top: 90%;
+      left: 60%;
+      -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+    }
+  </style>
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="/static/mysite/css/style.css">
+</head>
+
+<body style="background-color:white;">
+  <!-- #d6cbd3 -->
+  <nav class="navbar navbar-expand-sm navbar-light fixed-top bg-light">
+    <a class="navbar-brand d-none d-sm-block" href="{% url 'index' %}">Magma: Quantification and analysis of MS data</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+      aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item ml-sm-3">
+          <a class="nav-link" href="{% url 'index' %}">Home<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item ml-sm-3">
+          <a class="nav-link" href="{% url 'downloads' %}">Downloads</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="{% url 'about' %}">About</a>
+        </li>
+        <li class="nav-item ml-sm-3">
+          <a class="nav-link" href="{% url 'usage' %}">Help</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <br>
+  <br>
+  <div class="color-box">
+    <img src="{% static 'mysite/images/LAVA-PipelineLogo.svg' %}" class="responsiveImage" style="width:17%"> </img>
+    <h5 class="responsiveText">Comprehensive Tool for Differential Expression Analysis in MS Proteomics</h5>
+    <a href="https://github.com/shg018/Computational-Mass-Spec-Mini-Review" class="responsiveButton btn btn-default btn-lg">View on Github</a>
+  </div>
+  
+  <div class="content">
+
+  <img src="{% static 'mysite/images/Website_About_Schematic.svg' %}" class="responsiveLeft" style="width:25%"></img>
+  <div class="responsiveRight">
+    <p>
+      Large shifts in abundance of proteins under different testing conditions can be easily detected by most methods.
+      This is especially true for highly abundant proteins, or proteins that have a large number of identifications
+      uniquely associated with them.
+      The problem becomes more prominent in the hard cases where the detectable shift in abundance is both small and
+      arises from very few measurements.
+      It is in this context we introduce our tool called <b>M</b>aximal <b>A</b>ggregation of <b>G</b>ood protein signal
+      from <b>Ma</b>ss spectrometric data (MAGMa) that we show performs better across many metrics on various search
+      tools in comparison to popular tools in detecting true signal without sacrificing its ability to distinguish and
+      identify noise in parallel.
+      Referred to as a tradeoff between sensitivity and specificity we show that MAGMa strikes a balance between both,
+      is robust and applicable across various applications. Coupled with a user-friendly web server that allows the user
+      to choose across various statistical assumptions that would be appropriate for their specific analysis, MAGMa also
+      comes with the functionality of downstream visual assessment of the results in the form of volcano and network
+      plots.
+      <br><br> Check manuscript: -
+    </p>
+  </div>
+</div>
+  <br>
+  <br>
+  <br>
+  <br>
+  <footer class="navbar navbar-expand-sm navbar-light fixed-bottom bg-light">
+    <div class="responsive text-center small footer-text">
+      <span class="text-muted">
+        Designed by <a href="mailto:sg2369@cornell.edu">Shagun Gupta</a> | © 2023-2023 <a
+          href="https://www.yulab.org">Yu Lab</a>
+      </span>
+    </div>
+  </footer>
+</body>
+
+</html>

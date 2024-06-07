@@ -1,0 +1,709 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Magma Network plot</title>
+    <!-- <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script> -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script> -->
+    <!-- <style>
+        @media (max-width: 1388px) {
+            body {min-width: 1388px;}
+        }
+    </style>
+    {% load static %} -->
+    <!-- Google tag (gtag.js) -->
+    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-75GB1DLLMT"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-75GB1DLLMT');
+    </script> -->
+  <style>
+
+    @media (max-width: 1388px) {
+      body {min-width: 1388px;}
+  }
+   
+  </style>
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="/static/mysite/css/volcano.css">
+
+</head>
+
+<body style="background-color:white;">
+
+  <!-- <nav>
+    <div class="topnav">
+      <a href="{% url 'index' %}">Magma: Quantification and analysis of MS data</a>
+      <div class="topnav-right">
+        <a href="{% url 'index' %}">Home</a>
+        <a href="{% url 'downloads' %}">Downloads</a>
+        <a href="{% url 'about' %}">About</a>
+      </div>
+    </div>
+  </nav> -->
+
+  <nav class="navbar navbar-expand-sm navbar-light fixed-top bg-light">
+    <a class="navbar-brand d-none d-sm-block" href="{% url 'index' %}">Magma: Quantification and analysis of MS data</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item ml-sm-3">
+                <a class="nav-link" href="{% url 'index' %}">Home<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item ml-sm-3">
+                <a class="nav-link" href="{% url 'downloads' %}">Downloads</a>
+            </li>
+            <li class="nav-item ml-sm-3">
+                <a class="nav-link" href="{% url 'about' %}">About</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<br>
+<br>
+<br>
+<div id="center">
+  
+<form action="{% url 'networkplot' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ message_network }}
+            <h5 style="color:#588c7e"> Upload the file to visualize the network plot</h3>         
+            <p>{{ form_networkinput.non_field_errors }}</p>
+            <p>{{ form_networkinput.docfile_networkcsv.label_tag }} {{ form_networkinput.docfile_networkcsv.help_text }}</p>
+
+            <p>
+                {{ form_networkinput.docfile_networkcsv.errors }}
+                {{ form_networkinput.docfile_networkcsv }}
+            </p>
+
+          
+
+  <!-- <p>
+    <label for="file">Choose file to upload</label>
+    <input type="file" id="volcanofile" name="volcanofile" multiple />
+  </p> -->
+
+  <p><input type="submit" value="Submit">
+  <input type="reset" value="Reset"></p>
+  {% load static %}
+  <a href="{% static 'PML_network_example.csv' %}" download>Sample file</a>
+
+
+   
+</form>
+</div>
+<script src="https://d3js.org/d3.v4.js"></script>
+<!-- <svg width="800" height="600"></svg>
+    <script>
+      var miserables = "{% static 'miserable.json' %}";
+      miserables = miserables.replace("static/","media/documents/tmtipms_files/");
+      // Load the data from the JSON file
+      d3.json(miserables, function(error, graph) {
+        if (error) throw error;
+
+        // Create the SVG container
+        var svg = d3.select("svg"),
+            width = +svg.attr("width"),
+            height = +svg.attr("height");
+
+        // Define the force simulation
+        var simulation = d3.forceSimulation()
+            .force("link", d3.forceLink().id(function(d) { return d.id; }))
+            .force("charge", d3.forceManyBody())
+            .force("center", d3.forceCenter(width / 2, height / 2));
+
+        // Add the links to the simulation
+        var link = svg.append("g")
+            .attr("class", "links")
+            .selectAll("line")
+            .data(graph.links)
+            .enter().append("line")
+            .attr("stroke-width", function(d) { return Math.sqrt(d.value); });
+
+        // Add the nodes to the simulation
+        var node = svg.append("g")
+            .attr("class", "nodes")
+            .selectAll("circle")
+            .data(graph.nodes)
+            .enter().append("circle")
+            .attr("r", 5)
+            .attr("fill", function(d) { return color(d.group); })
+            .call(d3.drag()
+                .on("start", dragstarted)
+                .on("drag", dragged)
+                .on("end", dragended));
+
+        // Define the color scale
+        var color = d3.scaleOrdinal(d3.schemeCategory10);
+
+        // Add the labels to the nodes
+        var label = svg.append("g")
+            .attr("class", "labels")
+            .selectAll("text")
+            .data(graph.nodes)
+            .enter().append("text")
+            .text(function(d) { return d.id; })
+            .attr("dx", 10)
+            .attr("dy", ".35em");
+
+        // Start the simulation
+        simulation
+            .nodes(graph.nodes)
+            .on("tick", ticked);
+
+        simulation.force("link")
+            .links(graph.links);
+
+        // Define the tick function
+        function ticked() {
+          link
+              .attr("x1", function(d) { return d.source.x; })
+              .attr("y1", function(d) { return d.source.y; })
+              .attr("x2", function(d) { return d.target.x; })
+              .attr("y2", function(d) { return d.target.y; });
+
+          node
+              .attr("cx", function(d) { return d.x; })
+              .attr("cy", function(d) { return d.y; });
+
+          label
+              .attr("x", function(d) { return d.x; })
+              .attr("y", function(d) { return d.y; });
+        }
+
+        // Define the drag functions
+        function dragstarted(d) {
+          if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+          d.fx = d.x;
+          d.fy = d.y;
+        }
+
+        function dragged(d) {
+          d.fx = d3.event.x;
+          d.fy = d3.event.y;
+        }
+        function dragended(d) {
+      if (!d3.event.active) simulation.alphaTarget(0);
+      d.fx = null;
+      d.fy = null;
+    }
+  });
+</script> -->
+
+<!-- <br><br><br><br><br>
+<br><br><br><br> -->
+<br><br><br><br>
+<br><br><br><br>
+<div id="my_dataviz"></div>
+    <br><br><br><br>
+
+
+<script>
+
+var filename_network_plot = "{% static result_file_name %}";
+// alert(filename_volcano_plot);
+filename_network_plot = filename_network_plot.replace(".xlsx",".csv");
+
+//TODO - static file not found and app dies as a result
+filename_network_plot = filename_network_plot.replace("static/","media/documents/tmtipms_files/");
+// Load the CSV file using the d3.js library
+d3.csv(filename_network_plot, function(data) {
+
+  // Create an object to hold our protein interactions
+  var interactions = {};
+  var nodeIndex = {};
+  var indNum = 0;
+
+  // Loop through the data and create nodes for each protein
+  data.forEach(function(d) {
+    // Check if the proteins have already been added to the interactions object
+    // if (!interactions[d.proteinA]) {
+    //   nodeIndex[d.proteinA] = indNum;
+    //   indNum = indNum+1;
+    //   interactions[d.proteinA] = {group: d.groupA, targets: []};
+    //   // interactions[d.proteinA] = {group: 1, targets: []};
+      
+    // }
+    // if (!interactions[d.proteinB]) {
+    //   nodeIndex[d.proteinB] = indNum;
+    //   indNum = indNum+1;
+    //   interactions[d.proteinB] = {group: d.groupB, targets: []};
+    //   // interactions[d.proteinB] = {group: 2, targets: []};
+      
+    // }
+    if (!interactions[nodeIndex[d.proteinA]]) {
+      nodeIndex[d.proteinA] = indNum;
+      indNum = indNum+1;
+      interactions[nodeIndex[d.proteinA]] = {group: d.groupA, numpsm: d.numPSMsA, uniprot: d.proteinA, genesymbol: d.GeneSymbolA, complexName: d.complexAname, targets: []};
+      // interactions[d.proteinA] = {group: 1, targets: []};
+      
+    }
+    if (!interactions[nodeIndex[d.proteinB]]) {
+      nodeIndex[d.proteinB] = indNum;
+      indNum = indNum+1;
+      interactions[nodeIndex[d.proteinB]] = {group: d.groupB, numpsm:d.numPSMsA, uniprot: d.proteinB, genesymbol: d.GeneSymbolB, complexName: d.complexBname, targets: []};
+      // interactions[d.proteinB] = {group: 2, targets: []};
+      
+    }
+
+    // Add the interaction between proteinA and proteinB
+    // interactions[d.proteinA].targets.push(d.proteinB);
+    // interactions[d.proteinB].targets.push(d.proteinA);
+    interactions[nodeIndex[d.proteinA]].targets.push(nodeIndex[d.proteinB]);
+    interactions[nodeIndex[d.proteinB]].targets.push(nodeIndex[d.proteinA]);
+  });
+
+  // Convert the interactions object to an array of nodes and links
+  var nodes = Object.keys(interactions).map(function(name) {
+    return {name: name, group: interactions[name].group, numpsm: interactions[name].numpsm, uniprot:interactions[name].uniprot, genesymbol:interactions[name].genesymbol, complexName:interactions[name].complexName};
+  });
+  var links = [];
+  Object.keys(interactions).forEach(function(source) {
+    interactions[source].targets.forEach(function(target) {
+      // links.push({source: source, target: target});
+      // links.push({source: nodeIndex[source], target: nodeIndex[target], value: 5});
+      links.push({source: source, target: target, value: interactions[target].numpsm});
+    });
+  });
+
+  // Create an object to hold the final data in JSON format
+  var jsonData = {nodes: nodes, links: links};
+
+  // Output the JSON data to the console
+  console.log(JSON.stringify(jsonData));
+
+
+
+// set the dimensions and margins of the graph
+var margin = {top: 50, right: 30, bottom: 30, left: 60},
+        width = 860 - margin.left - margin.right,
+        height = 600 - margin.top - margin.bottom;
+
+// var margin = {top: 50, right: 30, bottom: 30, left: 60},
+//         width = 860 - margin.left - margin.right,
+//         height = 900 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+var svg = d3.select("#center")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+
+// Define the color scale
+var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+var tooltip = d3.select("#center")
+        .append("g")
+        .style("position", "absolute")
+        .style("font-size", "20px")
+        .style("z-index", "10")
+        .style("visibility", "hidden")
+        .style("background", "#FFFFFF")
+        .text("a simple tooltip");
+
+// Define the force simulation
+var simulation = d3.forceSimulation()
+    .force("link", d3.forceLink().distance(function(d){ return 3+d.value;}))//d3.forceLink().id(function(d) { return d.id; }).distance(10))//50 for IP //10 for whole proteome
+    .force("charge", d3.forceManyBody().strength(-100))//-100 for IP //-1 for whole proteome
+    .force("center", d3.forceCenter(width / 2, height / 2));
+
+// Create the links
+var link = svg.selectAll(".link")
+    .data(jsonData.links)
+    .enter().append("line")
+    .attr("stroke-width", function(d) { return 10*(1/d.value); })//100+Math.sqrt(d.value)
+    .attr("class", "link");
+
+// Create the nodes
+var node = svg.selectAll(".node")
+    .data(jsonData.nodes)
+    .enter().append("circle")
+    .attr("class", "node")
+    .attr("r", function(d) { return (d.numpsm/5)+5; })
+    .attr("text", function(d) { return d.uniprot; })
+    // .attr("cy", function(d) { return d.group; })
+    .attr("fill", function(d) { return color(d.group); })
+    .on("click", click)
+    // .on("mouseover", function(d) { 
+    //   d3.select(this).select("text").style("visibility", "visible") 
+    // })
+    .on("mouseover", function(d){tooltip.text(d.uniprot + ":" + d.genesymbol + "\ncomplex: " + d.complexName); tooltip.style("top",(event.pageY+3)+"px"); tooltip.style("left",(event.pageX+3)+"px"); return tooltip.style("visibility", "visible");})//tooltip.style("top",(event.pageY-d.neglogpval+3)+"px"); tooltip.style("left",(event.pageX-d.log2FC+3)+"px");
+    .on("mouseout", function(){return tooltip.style("visibility", "hidden");})
+    // .on("mouseover", function(d)
+    // {
+    //     d3.select(d.name).style("visibility","visible")
+    // })
+    // .on("mouseout", function(d)
+    // {
+    //     d3.select(d.name).style("visibility","hidden")
+    // })
+    .call(d3.drag()
+        .on("start", dragstarted)
+        .on("drag", dragged)
+        .on("end", dragended));
+
+// var labels = node.append("text")
+//   .text(function(d) { return d.name; })
+//   .style("visibility", "hidden");
+
+// Group the nodes by cluster
+var clusters = {};
+jsonData.nodes.forEach(function(d) {
+  if (!clusters[d.group]) {
+    clusters[d.group] = {id: d.group, nodes: []};
+  }
+  clusters[d.group].nodes.push(d);
+});
+var clusterArray = Object.values(clusters);
+
+// Define the click function
+function click(d) {
+  if (d3.event.defaultPrevented) return; // ignore drag
+  if (!d.cluster) return; // ignore nodes that don't belong to a cluster
+
+  // Determine if the cluster is currently expanded or collapsed
+  var expanded = d.cluster.expanded || false;
+
+  // Expand or collapse the cluster
+  d.cluster.expanded = !expanded;
+
+  // Set the opacity of the nodes and links based on the cluster's expanded state
+  node.style("opacity", function(n) {
+    return (n.cluster === d.cluster || n === d) ? 1 : (expanded ? 0.1 : 0.5);
+  });
+  link.style("opacity", function(l) {
+    return (l.source.cluster === d.cluster && l.target.cluster === d.cluster) ? 1 : (expanded ? 0.1 : 0.5);
+  });
+}
+
+// // Define the drag functions
+function dragstarted(d) {
+  if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+  d.fx = d.x;
+  d.fy = d.y;
+}
+
+function dragged(d) {
+  d.fx = d3.event.x;
+  d.fy = d3.event.y;
+}
+
+function dragended(d) {
+  if (!d3.event.active) simulation.alphaTarget(0);
+  d.fx = null;
+  d.fy = null;
+}
+
+// Define the tick function
+function tick() {
+  link.attr("x1", function(d) { return d.source.x; })
+      .attr("y1", function(d) { return d.source.y; })
+      .attr("x2", function(d) { return d.target.x; })
+      .attr("y2", function(d) { return d.target.y; });
+
+  node.attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; });
+}
+
+// Define the zoom behavior
+var zoom = d3.zoom()
+.on("zoom", zoomed);
+
+// Apply the zoom behavior to the SVG element
+svg.call(zoom);
+
+// Define the zoom function
+function zoomed() {
+svg.attr("transform", d3.event.transform);
+}
+
+// Start the simulation
+simulation.nodes(jsonData.nodes)
+.on("tick", tick);
+
+simulation.force("link")
+.links(jsonData.links);
+
+// Cluster the nodes
+node.each(function(d) {
+for (var i = 0; i < clusterArray.length; i++) {
+if (clusterArray[i].id === d.group) {
+d.cluster = clusterArray[i];
+break;
+}
+}
+});
+
+// Set the initial opacity of the nodes and links
+node.style("opacity", 1);
+link.style("opacity", 1);
+
+
+
+
+});
+
+</script>
+
+
+    <!-- <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> -->
+    <!-- <div id="networkplot"></div> -->
+    <!-- <script src="https://gw.alipayobjects.com/os/lib/antv/g6/4.3.11/dist/g6.min.js"></script> -->
+    <!-- {% load static %}
+    <script>
+
+    
+    // set the dimensions and margins of the graph
+    // var margin = {top: 10, right: 30, bottom: 30, left: 60},
+    //     widthvolc = 860 - margin.left - margin.right,
+    //     heightvolc = 800 - margin.top - margin.bottom;
+
+    var margin = {top: 50, right: 30, bottom: 30, left: 60},
+        widthvolc = 860 - margin.left - margin.right,
+        heightvolc = 600 - margin.top - margin.bottom;
+
+
+    
+    // append the svg object to the body of the page
+    var svg = d3.select("#my_dataviz")
+      .append("svg")
+        .attr("width", widthvolc + margin.left + margin.right)
+        .attr("height", heightvolc + margin.top + margin.bottom)
+      .append("g")
+        .attr("transform",
+              "translate(" + margin.left + "," + margin.top + ")");
+    
+    
+    var sliderFC = document.getElementById("fcRange");
+    var outputFC = document.getElementById("fcValue");
+    outputFC.innerHTML = sliderFC.value; // Display the default FC slider value
+
+    // Update the FC slider value (each time you drag the slider handle)
+    sliderFC.oninput = function() {
+        outputFC.innerHTML = this.value;
+    }
+
+    var sliderPval = document.getElementById("pvalRange");
+    var outputPval = document.getElementById("pvalValue");
+    outputPval.innerHTML = sliderPval.value; // Display the default FC slider value
+
+    // Update the Pvalue slider value (each time you drag the slider handle)
+    sliderPval.oninput = function() {
+        outputPval.innerHTML = this.value;
+    }
+
+    //Read the data
+    // var filename_volcano_plot = "{% static 'Control-PML_example.csv' %}";
+    // var filename_volcano_plot = document.getElementById("volcanofile");
+    var filename_volcano_plot = "{% static result_file_name %}";
+    // alert(filename_volcano_plot);
+    filename_volcano_plot = filename_volcano_plot.replace(".xlsx",".csv");
+
+    //TODO - static file not found and app dies as a result
+    filename_volcano_plot = filename_volcano_plot.replace("static/","media/documents/tmtipms_files/");
+    // alert(filename_volcano_plot);
+
+    d3.csv(filename_volcano_plot, function(data) {
+        // alert(output.innerHTML);
+        // alert(data);
+        // console.log(data[0]); // print out the first row of the data
+
+        data.forEach(function(d) {
+            d.pval = +d.pval;
+            d.adjpval = +d.adjpval;
+            d.neglogpval = -1.0*Math.log10(d.pval);
+            d.log2FC = +d.log2FC;
+            d.genesymbol = d['Gene Symbol'];
+            // d.genesymbol = parseDate(d['Gene Symbol']);
+            
+        });
+        // alert(data);
+
+        // #TODO filter data by # PSMs
+        // data.filter(function(d){ return  (d.name == "toto" || d.name == "tutu") })
+
+        var height_yaxis = d3.max(data, function(d) { return d.neglogpval; });
+        var pos_width_xaxis = d3.max(data, function(d) { return d.log2FC; });
+        var neg_width_xaxis = d3.min(data, function(d) { return d.log2FC; });
+        var x_range = d3.max([pos_width_xaxis,-1.0 * neg_width_xaxis]);
+        // alert(height_yaxis);
+        // alert(pos_width_xaxis);
+        // alert(x_range);
+
+        // Add X axis
+        var x = d3.scaleLinear()
+        .domain([-1.0*x_range, x_range])
+        // .domain([0, 1000])
+        .range([ 0, widthvolc ]);
+        svg.append("g")
+        .attr("transform", "translate(0," + heightvolc + ")")
+        .call(d3.axisBottom(x));
+
+        
+        // Add Y axis
+        var y = d3.scaleLinear()
+        .domain([0,height_yaxis])
+        // .domain([0,800])
+        .range([ heightvolc, x_range]);
+        svg.append("g")
+        .attr("transform", "translate(" + widthvolc/2 + ",0)")
+        .call(d3.axisLeft(y));
+
+
+        // alert(height_yaxis);
+        // alert(outputFC.innerHTML);
+
+        var FCval = Math.log2(outputFC.innerHTML);
+        var pvalcutoff = -1.0*Math.log10(outputPval.innerHTML);
+
+        // alert(FCval);
+
+        var tooltip = d3.select("#my_dataviz")
+        .append("g")
+        .style("position", "absolute")
+        .style("z-index", "10")
+        .style("visibility", "hidden")
+        .style("background", "#FFFFFF")
+        .text("a simple tooltip");
+
+        function hexcodeScatter(d, FCval, pvalcutoff){
+            if ((d.log2FC>=FCval)&&(d.neglogpval>=pvalcutoff)) { return "#31a354"; } 
+            else if ((d.log2FC>=FCval)&&(d.neglogpval<pvalcutoff)){return "#a1d99b";} 
+            else if (((d.log2FC<FCval)&&(d.log2FC>-1.0*FCval))&&(d.neglogpval>=pvalcutoff)) {return "#636363";} 
+            else if (((d.log2FC<FCval)&&(d.log2FC>-1.0*FCval))&&(d.neglogpval<pvalcutoff)) {return "#bdbdbd";} 
+            else if ((d.log2FC<=-1.0*FCval)&&(d.neglogpval>=pvalcutoff)) {return "#de2d26";} 
+            else {return "#fc9272";}
+
+        }
+
+        // Add dots for scatter plot
+        var scatter = svg.append('g')
+        .selectAll("dot")
+        .data(data)
+        .enter()
+        .append("circle")
+            .attr("cx", function (d) { return x(d.log2FC); } )
+            .attr("cy", function (d) { return y(d.neglogpval); })
+            .attr("r", 5)
+            .style("fill", function(d) { return hexcodeScatter(d, FCval, pvalcutoff); })
+            //.text(function(d) { return d.genesymbol; })
+            .on("mouseover", function(d){tooltip.text(d.genesymbol); tooltip.style("top",(event.pageY-d.neglogpval+3)+"px"); tooltip.style("left",(event.pageX-d.log2FC+3)+"px"); return tooltip.style("visibility", "visible");})
+            .on("mouseout", function(){return tooltip.style("visibility", "hidden");});
+        
+        
+
+        // A function that update the chart when slider is moved?
+        function updateChart(FCval,pvalcutoff) {
+            // // update the chart
+            scatter = svg.append('g')
+            .selectAll("dot")
+            .data(data)
+            .enter()
+            .append("circle")
+                .attr("cx", function (d) { return x(d.log2FC); } )
+                .attr("cy", function (d) { return y(d.neglogpval); })
+                .attr("r", 5)
+                .style("fill", function(d) { return hexcodeScatter(d, FCval, pvalcutoff); })
+                .on("mouseover", function(d){tooltip.text(d.genesymbol); tooltip.style("top",(event.pageY-d.neglogpval+3)+"px"); tooltip.style("left",(event.pageX-d.log2FC+3)+"px"); return tooltip.style("visibility", "visible");})
+                .on("mouseout", function(){return tooltip.style("visibility", "hidden");});
+        }
+
+        // Listen to the FC slider?
+        d3.select("#fcRange").on("change", function(d){
+            selectedValue = this.value
+            //console.log(selectedValue)
+            FCval = Math.log2(selectedValue)
+            updateChart(Math.log2(selectedValue),pvalcutoff)
+        });
+
+        // Listen to the Pvalue slider?
+        d3.select("#pvalRange").on("change", function(d){
+            selectedValue = this.value
+            //console.log(selectedValue)
+            pvalcutoff = -1.0*Math.log10(selectedValue)
+            updateChart(FCval,-1.0*Math.log10(selectedValue))
+        });
+    });
+
+    function hyperbolicRightCurve(X,c,x0plot){
+        return X.map(function(x) {
+            return [x, c/(i-2*x0plot)];
+        });
+    }
+
+    </script> -->
+
+
+
+
+
+<footer class="navbar navbar-expand-sm navbar-light fixed-bottom bg-light">
+  <div class="responsive text-center small footer-text">
+      <span class="text-muted">
+          Designed by <a href="mailto:sg2369@cornell.edu">Shagun Gupta</a> | © 2023-2023 <a href="https://www.yulab.org">Haiyuan Yu</a>
+      </span>
+  </div>
+</footer>
+
+
+
+<script>
+  // // The tooltip window scales according to window size and is not accurate compared to svg
+  // document.getElementById("MyPath").setAttribute("d", document.getElementById("Path").getAttribute("d"));
+  // var tl = new TimelineMax({
+  //   repeat: 0,
+  //   delay: 1
+  // });
+  // tl.to("#Text", 3, {
+  //   attr: {
+  //     startOffset: '50%',
+  //     opacity: 1
+  //   }
+  // });
+
+
+  // window.addEventListener('scroll', function() {
+  //   tl.to("#Text", 3, {
+  //     attr: {
+  //       startOffset: '100%',
+  //       opacity: 0
+  //     }
+  //   });
+  // }, true);
+
+  function showTooltipRight(evt, text) {
+    let tooltip = document.getElementById("tooltip");
+    tooltip.innerHTML = text;
+    tooltip.style.display = "block";
+    tooltip.style.left = evt.pageX - 150 + 'px';
+    tooltip.style.top = evt.pageY + 10 + 'px';
+  }
+
+  function showTooltipLeft(evt, text) {
+    let tooltip = document.getElementById("tooltip");
+    tooltip.innerHTML = text;
+    tooltip.style.display = "block";
+    tooltip.style.left = evt.pageX + 150 + 'px';
+    tooltip.style.top = evt.pageY + 10 + 'px';
+  }
+  
+  function hideTooltip() {
+    var tooltip = document.getElementById("tooltip");
+    tooltip.style.display = "none";
+  }
+</script>
+
+</body>
+</html>

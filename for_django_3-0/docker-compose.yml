@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8059
+    volumes:
+      - .:/code
+    ports:
+      - "8059:8059"
+    depends_on:
+      - db

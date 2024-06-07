@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Downloads</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="/static/mysite/css/setparametersforrun.css">
+  <!-- Google tag (gtag.js) -->
+  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-75GB1DLLMT"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-75GB1DLLMT');
+        </script> -->
+  <style>
+    div {
+      border: 0px solid red;
+    }
+
+    .color-box {
+      /* background-color: blue;  */
+      background-image: linear-gradient(180deg, #5e3c99, #fdb863);
+      width: 100%; 
+      height: 300px;
+    }
+
+    #left {
+      float: left;
+      width: 50%;
+    }
+
+    #right {
+      float: right;
+      width: 49%;
+    }
+
+    #center {
+      width: 60%;
+      margin: 0px auto;
+    }
+
+    #center_1 {
+      width: 30%;
+      margin: 0px auto;
+    }
+
+    span.circle {
+      background: #e3e3e3;
+      border-radius: 50%;
+      -moz-border-radius: 50%;
+      -webkit-border-radius: 50%;
+      color: #6e6e6e;
+      display: inline-block;
+      font-weight: bold;
+      line-height: 70px;
+      margin-right: 5px;
+      text-align: center;
+      width: 70px;
+    }
+
+    h3,
+    span.circle {
+      display: inline-block;
+    }
+
+    #errorexpanded {
+      display: none;
+    }
+
+    .responsiveLeft {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      position: absolute;
+      top: 50%;
+      left: 20%;
+      -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+    }
+
+    .responsiveRight {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      position: absolute;
+      top: 50%;
+      left: 60%;
+      -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+    }
+  </style>
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="/static/mysite/css/style.css">
+</head>
+
+<body style="background-color:white;">
+  <!-- #d6cbd3 -->
+  <nav class="navbar navbar-expand-sm navbar-light fixed-top bg-light">
+    <a class="navbar-brand d-none d-sm-block" href="{% url 'index' %}">Magma: Quantification and analysis of MS data</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+      aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item ml-sm-3">
+          <a class="nav-link" href="{% url 'index' %}">Home<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="{% url 'downloads' %}">Downloads</a>
+        </li>
+        <li class="nav-item ml-sm-3">
+          <a class="nav-link" href="{% url 'about' %}">About</a>
+        </li>
+        <li class="nav-item ml-sm-3">
+          <a class="nav-link" href="{% url 'usage' %}">Help</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <br>
+  <br>
+  <div class="color-box">
+    <img src="{% static 'mysite/images/LAVA-PipelineLogo.svg' %}" class="responsiveImage" style="width:17%"> </img>
+    <h5 class="responsiveText">Comprehensive Tool for Differential Expression Analysis in MS Proteomics</h5>
+    <a href="https://github.com/shg018/Computational-Mass-Spec-Mini-Review" class="responsiveButton btn btn-default btn-lg">View on Github</a>
+  </div>
+  <br>
+  <div id="center">
+    <h4 style="color:#fdb863">Annotation File </h4>
+    <p><b>TMT</b></p>
+    <p style="color:#FF0000">Ensure empty channels/ TMT labels are set as "none" under the column Label.</p>
+    <p>Example for an IP-MS TMT10 run of 3 baits and 1 control with two repeats per condition.</p>
+    <a href="{% static 'annotation_1220.csv' %}" download>Sample file (IP-MS)</a>
+    <br>
+    <br>
+    <p>Example for an IP-MS TMT10 run for cancer driver fusion FUS-ERG and 1 control with two repeats per condition.</p>
+    <a href="{% static 'FUS_ERG_annot.csv' %}" download>Sample file (Fusion IP-MS)</a>
+    <br>
+    <br>
+    <p>Example for benchmarking dataset (downsampled) of a TMT9 run of human yeast proteome with a yeast proteome
+      spike-in at specific ratios. Run on Orbitrap Fusion Lumos.</p>
+    <a href="{% static 'annotation.regTMT_p7_1p1_benchmark.csv' %}" download>Sample file (Whole-proteome)</a>
+    <br>
+    <br>
+    <br>
+    <p><b>DIA-LFQ</b></p>
+    <p>Example for an IP-MS run on Bruker of 4 conditions with 3 repeats each.</p>
+    <a href="{% static 'MLH1_FLAG_annotation.csv' %}" download>Sample file (IP-MS)</a>
+    <br>
+    <br>
+    <p>Example for benchmarking dataset (downsampled) of human yeast proteome with a yeast proteome spike-in at specific
+      ratios. Run on Bruker timsTOF with 80 min gradient.</p>
+    <a href="{% static 'annotation_DIA_HT_500ng_wholeprot.csv' %}" download>Sample file (Whole-proteome)</a>
+    <br>
+    <br>
+    <br>
+    <h4 style="color:#fdb863">File used for quantification</h4>
+    <p><b>TMT</b></p>
+    <p>IP-MS TMT10 run (downsampled) of 3 baits and 1 control with two repeats per condition.</p>
+    <a href="{% static 'CACO2-M-N-ORF3A-ORF6-0503HPH-SN_DownSampled.txt' %}" download>Sample file (IP-MS) S/N file for
+      Proteome Discoverer search</a>
+    <br>
+    <a href="{% static 'CACO2-M-N-ORF3A-ORF6-0503HPH-INTENSITY_DownSampled.txt' %}" download>Sample file (IP-MS) Raw
+      reporter intensity file for Proteome Discoverer search</a>
+    <br>
+    <!-- <a href="{% static 'CACO2-M-N-ORF3A-ORF6-0503HPH-INTENSITY_DownSampled.txt' %}" download>Sample file (IP-MS) for
+      COMET search</a>
+    <br> -->
+    <br>
+    <p>IP-MS TMT10 run for cancer driver fusion FUS-ERG and 1 control with two repeats per condition.</p>
+    <a href="{% static 'FUS_ERG_TMT_F_SN_30filteredtxt.txt' %}" download>Sample file (Fusion IP-MS) S/N file for
+      Proteome Discoverer search</a>
+    <br>
+    <a href="{% static 'FUS_ERG_TMT_F_INT_30filteredtxt.txt' %}" download>Sample file (Fusion IP-MS) Raw
+      reporter intensity file for Proteome Discoverer search</a>
+    <br>
+    <br>
+    <p>Benchmarking dataset (downsampled) of a TMT9 run of human yeast proteome with a yeast proteome
+      spike-in at specific ratios. Run on Orbitrap Fusion Lumos.</p>
+    <a href="{% static 'Benchmark_TMT_wholeproteome_SEQUEST_StoN_downsampled500_PSMs.txt' %}" download>Sample file (whole proteome) S/N file for
+      Proteome Discoverer search</a>
+    <br>
+    <a href="{% static 'Benchmark_TMT_wholeproteome_SEQUEST_Intensity_downsampled500_PSMs.txt' %}" download>Sample file (whole proteome) Raw
+      reporter intensity file for Proteome Discoverer search</a>
+    <br>
+    <a href="{% static 'Benchmark_TMT_wholeproteome_COMET_StoN_downsampled500_PSMs.txt' %}" download>Sample file (whole proteome) Raw
+      reporter intensity file for COMET search</a>
+    <br>
+    <br>
+    <p><b>DIA-LFQ</b></p>
+    <p>IP-MS run on Bruker of 4 conditions with 3 repeats each. </p>
+    <a href="{% static 'MLH1_FLAG_20230720.pg_matrix.tsv' %}" download>Sample file (IP-MS - Protein level)</a>
+    <br>
+    <a href="{% static 'MLH1_FLAG_20230720_example.tsv' %}" download>Sample file (IP-MS - Full Information
+      for # precursor assignment)</a>
+    <br>
+    <br>
+    <p>Benchmarking dataset (downsampled) of human yeast proteome with a yeast proteome spike-in at specific ratios. Run
+      on Bruker timsTOF with 80 min gradient. </p>
+    <a href="{% static 'Benchmark_DIA-LFQ_wholeproteome_DIANN_downsampled500_ProtLvl.txt' %}" download>Sample file (Whole Proteome - Protein
+      level)</a>
+    <br>
+    <a href="{% static 'Benchmark_DIA-LFQ_wholeproteome_DIANN_downsampled500_PrecLvl.txt' %}" download>Sample file (Whole Proteome - Precursor
+      level)</a>
+    <br>
+    <a href="{% static 'Benchmark_DIA-LFQ_wholeproteome_DIANN_downsampled500_FullInfo.txt' %}" download>Sample file (Whole Proteome - Full Information
+      for # precursor assignment)</a>
+    <br>
+    <br>
+    <br>
+  </div>
+  <footer class="navbar navbar-expand-sm navbar-light fixed-bottom bg-light">
+    <div class="responsive text-center small footer-text">
+      <span class="text-muted">
+        Designed by <a href="mailto:sg2369@cornell.edu">Shagun Gupta</a> | © 2023-2023 <a
+          href="https://www.yulab.org">Yu Lab</a>
+      </span>
+    </div>
+  </footer>
+</body>
+
+</html>
